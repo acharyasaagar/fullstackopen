@@ -1,1 +1,4 @@
-/react-barebone
+react-barebone/
+.vscode/
+**/node_modules/
+
