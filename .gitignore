@@ -1,4 +1,6 @@
 react-barebone/
 .vscode/
 **/node_modules/
+.prettierrc
+**/.env
 

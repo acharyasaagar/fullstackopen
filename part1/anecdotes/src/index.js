@@ -7,10 +7,17 @@ const anecdotes = [
   'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
   'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
   'Premature optimization is the root of all evil.',
-  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
+  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
 ]
-const Button = ({ handleClick, title }) => <button onClick={handleClick}>{title}</button>
-const Break = () => <> <hr /> <br /> </>
+const Button = ({ handleClick, title }) => (
+  <button onClick={handleClick}>{title}</button>
+)
+const Break = () => (
+  <>
+    {' '}
+    <hr /> <br />{' '}
+  </>
+)
 
 const getRandom = (selected, max) => {
   let random = Math.floor(Math.random() * max)
@@ -29,7 +36,7 @@ const App = ({ anecdotes }) => {
   const [highestVoted, setHighestVoted] = useState(0)
 
   const handleNext = () => setSelected(getRandom(selected, anecdotesLength))
-  
+
   const handleVote = () => {
     const newVotes = [...votes]
     newVotes[selected] += 1
@@ -37,20 +44,24 @@ const App = ({ anecdotes }) => {
     setHighestVoted(indexOfHighestVoted(newVotes))
   }
 
-  const indexOfHighestVoted = (votes) => votes.indexOf(Math.max(...votes))
+  const indexOfHighestVoted = votes => votes.indexOf(Math.max(...votes))
 
   return (
     <div>
       <h2>Anecdote of the day</h2>
       <Break />
       <p>{anecdotes[selected]}</p>
-      <p>This anecdote is voted <b> {votes[selected]} </b> times.</p>
+      <p>
+        This anecdote is voted <b> {votes[selected]} </b> times.
+      </p>
       <Button handleClick={handleVote} title="Vote" />
       <Button handleClick={handleNext} title="Next Anecdote" />
       <Break />
       <h2>Anecdote with most votes</h2>
       <p>{anecdotes[highestVoted]}</p>
-      <p>This anecdote is voted <b> {votes[highestVoted]} </b> times.</p>
+      <p>
+        This anecdote is voted <b> {votes[highestVoted]} </b> times.
+      </p>
       <Break />
     </div>
   )
