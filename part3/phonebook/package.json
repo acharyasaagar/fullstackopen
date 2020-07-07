@@ -21,5 +21,10 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "/**/*.json"
+    ]
   }
 }

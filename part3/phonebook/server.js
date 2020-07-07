@@ -7,7 +7,7 @@ const path = require('path')
 const personsJsonPath = path.join(__dirname, '/persons.json')
 const idSeqPath = path.join(__dirname, '/id_seq.txt')
 
-const persons = JSON.parse(fs.readFileSync(personsJsonPath, 'utf-8'))
+const port = process.env.PORT || 8080
 
 const getNextPersonId = () => Number(fs.readFileSync(idSeqPath, 'utf-8'))
 
@@ -25,6 +25,7 @@ app.use(
 )
 
 app.get('/info', (req, res) => {
+  const persons = JSON.parse(fs.readFileSync(personsJsonPath, 'utf-8'))
   const responseHtml = `
     <p> Phonebook has information for ${persons.length} people. </p>
     <p> ${new Date()} </p>
@@ -33,13 +34,14 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
+  const persons = JSON.parse(fs.readFileSync(personsJsonPath, 'utf-8'))
   res.json(persons)
 })
 
 app.post('/api/persons', (req, res) => {
   const id = getNextPersonId()
   const { name, number } = req.body
-
+  const persons = JSON.parse(fs.readFileSync(personsJsonPath, 'utf-8'))
   if (name && number) {
     const isNameUnique = !persons.find(p => p.name === name)
     if (isNameUnique) {
@@ -63,12 +65,14 @@ app.post('/api/persons', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
+  const persons = JSON.parse(fs.readFileSync(personsJsonPath, 'utf-8'))
   const person = persons.find(p => p.id === Number(req.params.id))
   if (person) return res.send(person)
   return res.status(404).end()
 })
 
 app.delete('/api/persons/:id', (req, res) => {
+  const persons = JSON.parse(fs.readFileSync(personsJsonPath, 'utf-8'))
   const newPersons = persons.filter(p => p.id !== Number(req.params.id))
   const newPersonsStr = JSON.stringify(newPersons)
   fs.writeFile(personsJsonPath, newPersonsStr, (err, written) => {
@@ -77,6 +81,4 @@ app.delete('/api/persons/:id', (req, res) => {
   })
 })
 
-app.listen((port = 8080), () =>
-  console.log('\n Server started at port', port, '\n')
-)
+app.listen(port, () => console.log('\n Server started at port', port, '\n'))

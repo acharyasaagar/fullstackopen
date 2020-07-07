@@ -29,6 +29,12 @@ const App = () => {
 
   useEffect(hook, [])
 
+  /** Change successMessage State to show error */
+  const handleError = _ => {
+    setSuccessMessage('Oops an error occured while trying to save your data!')
+    setTimeout(() => setSuccessMessage(null), 5000)
+  }
+
   /**
    * Custom methods
    */
@@ -57,21 +63,31 @@ const App = () => {
         `${incomingPersonName} is already on phonebook, replace old number with new one?`
       )
       if (shouldReplace) {
-        return personService.update(duplicate.id, personPayload).then(data => {
-          /** update state after response is received */
-          setPersons(persons.map(p => (p.id === duplicate.id ? data : p)))
-          setSuccessMessage(`Number changed: ${personPayload.number}`)
-          setTimeout(() => setSuccessMessage(null), 5000)
-        })
+        return personService
+          .update(duplicate.id, personPayload)
+          .then(data => {
+            /** update state after response is received */
+            setPersons(persons.map(p => (p.id === duplicate.id ? data : p)))
+            setSuccessMessage(`Number changed: ${personPayload.number}`)
+            setTimeout(() => setSuccessMessage(null), 5000)
+          })
+          .catch(err => {
+            return handleError()
+          })
       }
     }
-    return personService.create(personPayload).then(data => {
-      /** Update state after response is received */
-      const newPersons = persons.concat(data)
-      setPersons(newPersons)
-      setSuccessMessage(`Added: ${personPayload.name}`)
-      setTimeout(() => setSuccessMessage(null), 5000)
-    })
+    return personService
+      .create(personPayload)
+      .then(data => {
+        /** Update state after response is received */
+        const newPersons = persons.concat(data)
+        setPersons(newPersons)
+        setSuccessMessage(`Added: ${personPayload.name}`)
+        setTimeout(() => setSuccessMessage(null), 5000)
+      })
+      .catch(err => {
+        return handleError()
+      })
   }
 
   const handlePersonChange = e => {
