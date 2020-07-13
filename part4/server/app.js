@@ -2,9 +2,16 @@ const cors = require('cors')
 const express = require('express')
 const mongoose = require('mongoose')
 
+/** Models */
 const blogRouter = require('./controllers/blog')
 
+/** Custom Middlewares */
+const requestLogger = require('./middlewares/requestLogger')
+
+/** Utils */
 const { MONGODB_URI } = require('./utils/constants')
+
+/** ----------------------------------------------- */
 const app = express()
 
 mongoose
@@ -14,6 +21,7 @@ mongoose
 
 app.use(cors())
 app.use(express.json())
+app.use(requestLogger)
 
 app.use('/api/blogs', blogRouter)
 
