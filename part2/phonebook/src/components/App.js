@@ -24,14 +24,21 @@ const App = () => {
    * Effect Hooks
    */
   const hook = () => {
-    personService.getAll().then(data => setPersons(data))
+    personService.getAll().then(data => {
+      const dummyPerson = {
+        id: '4f096d474be3404961749f8',
+        name: 'Dummy Man',
+        number: '4358852438',
+      }
+      setPersons(data.concat(dummyPerson))
+    })
   }
 
   useEffect(hook, [])
 
   /** Change successMessage State to show error */
-  const handleError = _ => {
-    setSuccessMessage('Oops an error occured while trying to save your data!')
+  const handleError = err => {
+    setSuccessMessage(err.response.data.err)
     setTimeout(() => setSuccessMessage(null), 5000)
   }
 
@@ -54,28 +61,7 @@ const App = () => {
       name: incomingPersonName,
       number: newNumber,
     }
-    /** Check Duplicate */
-    const duplicate = persons.find(
-      p => p.name.toLowerCase() === incomingPersonName.toLowerCase()
-    )
-    if (duplicate) {
-      const shouldReplace = window.confirm(
-        `${incomingPersonName} is already on phonebook, replace old number with new one?`
-      )
-      if (shouldReplace) {
-        return personService
-          .update(duplicate.id, personPayload)
-          .then(data => {
-            /** update state after response is received */
-            setPersons(persons.map(p => (p.id === duplicate.id ? data : p)))
-            setSuccessMessage(`Number changed: ${personPayload.number}`)
-            setTimeout(() => setSuccessMessage(null), 5000)
-          })
-          .catch(err => {
-            return handleError()
-          })
-      }
-    }
+
     return personService
       .create(personPayload)
       .then(data => {
@@ -86,7 +72,7 @@ const App = () => {
         setTimeout(() => setSuccessMessage(null), 5000)
       })
       .catch(err => {
-        return handleError()
+        return handleError(err)
       })
   }
 

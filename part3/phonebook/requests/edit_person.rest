@@ -1,0 +1,7 @@
+PUT http://localhost:8080/api/persons/5f096d954be34047961749f9
+Content-Type: application/json
+
+{
+  "number": "04334875437",
+  "name": "Acharya Deepu"
+}
