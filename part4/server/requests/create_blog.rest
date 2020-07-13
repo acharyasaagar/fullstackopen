@@ -1,9 +1,0 @@
-POST http://localhost:8080/api/blogs
-Content-Type: application/json
-
-{
-  "title": "Full stack open 2020 course rocks",
-  "author": "Sagar Acharya",
-  "url": "https://fullstackopen.com",
-  "likes": 9889
-}

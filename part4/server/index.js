@@ -2,6 +2,8 @@ const cors = require('cors')
 const express = require('express')
 const mongoose = require('mongoose')
 
+const Blog = require('./models/blog')
+
 const { PORT, MONGODB_URI } = require('./utils/constants')
 const app = express()
 
@@ -11,8 +13,6 @@ const blogSchema = mongoose.Schema({
   url: String,
   likes: Number,
 })
-
-const Blog = mongoose.model('Blog', blogSchema)
 
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
