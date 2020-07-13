@@ -17,6 +17,7 @@
     "mongoose": "^5.9.23"
   },
   "devDependencies": {
+    "chalk": "^4.1.0",
     "nodemon": "^2.0.4"
   }
 }
