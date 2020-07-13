@@ -1,22 +1,7 @@
-const cors = require('cors')
-const express = require('express')
-const mongoose = require('mongoose')
+const http = require('http')
 
-const blogRouter = require('./controllers/blog')
+const app = require('./app')
+const { PORT } = require('./utils/constants')
 
-const { PORT, MONGODB_URI } = require('./utils/constants')
-const app = express()
-
-mongoose
-  .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(result => console.log('Mongo connected'))
-  .catch(err => console.log('mongo not connected'))
-
-app.use(cors())
-app.use(express.json())
-
-app.use('/api/blogs', blogRouter)
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+const server = http.createServer(app)
+server.listen(PORT, () => console.log(`Server listening on port ${PORT}`))
