@@ -1,7 +1,9 @@
 const chalk = require('chalk')
 
 exports.info = (...params) => {
-  console.log(chalk.blue(...params))
+  if (process.env.NODE_ENV !== 'test') {
+    console.log(chalk.blue(...params))
+  }
 }
 
 exports.error = (...params) => {
@@ -9,5 +11,7 @@ exports.error = (...params) => {
 }
 
 exports.log = (...params) => {
-  console.log(...params)
+  if (process.env.NODE_ENV !== 'test') {
+    console.log(...params)
+  }
 }
