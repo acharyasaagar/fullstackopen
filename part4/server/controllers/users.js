@@ -9,6 +9,11 @@ usersRouter.get('/', async (req, res) => {
 
 usersRouter.post('/', async (req, res) => {
   const { name, password: plainPassword, username } = req.body
+  if (plainPassword.length < 3) {
+    return res
+      .status(400)
+      .json({ err: 'Password cannot be shorter than 3 characters!!' })
+  }
   const password = await bcrypt.hash(plainPassword, 10)
   const user = new User({ name, password, username })
   const savedUser = await user.save()

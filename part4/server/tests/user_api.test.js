@@ -52,6 +52,75 @@ describe('When creating a user', () => {
     const usersAfter = await User.find({})
     expect(usersAfter).toHaveLength(initialUserCount + 1)
   })
+
+  it('should fail with 400 status when password is shorter than three characters', async () => {
+    const usersBefore = await User.find({})
+    expect(usersBefore).toHaveLength(initialUserCount)
+
+    const newUser = {
+      name: 'Poopy Pooperson',
+      password: 'AH',
+      username: 'pooperson',
+    }
+
+    const { body } = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(body.err).toBe('Password cannot be shorter than 3 characters!!')
+
+    const usersAfter = await User.find({})
+    expect(usersAfter).toHaveLength(initialUserCount)
+  })
+
+  it('should fail with 400 status when username is shorter than three characters', async () => {
+    const usersBefore = await User.find({})
+    expect(usersBefore).toHaveLength(initialUserCount)
+
+    const newUser = {
+      name: 'Poopy Pooperson',
+      password: 'AfasdfdsfsdafH',
+      username: 'on',
+    }
+
+    const { body } = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(body.err).toBeDefined()
+
+    const usersAfter = await User.find({})
+    expect(usersAfter).toHaveLength(initialUserCount)
+  })
+
+  it('should fail with 400 status when username is already exists in database', async () => {
+    const usersBefore = await User.find({})
+    expect(usersBefore).toHaveLength(initialUserCount)
+
+    const newUser = {
+      name: 'Poopy Pooperson',
+      password: 'AfasdfdsfsdafH',
+      username: 'rockon',
+    }
+
+    const user = new User(newUser)
+    await user.save()
+
+    const { body } = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(body.err).toBeDefined()
+
+    const usersAfter = await User.find({})
+    expect(usersAfter).toHaveLength(initialUserCount + 1)
+  })
 })
 
 afterAll(() => {
