@@ -11,6 +11,8 @@ const usersRouter = require('./controllers/users')
 /** Custom Middlewares */
 const errorHandler = require('./middlewares/errorHandler')
 const requestLogger = require('./middlewares/requestLogger')
+const tokenDecoder = require('./middlewares/tokenDecoder')
+const tokenExtractor = require('./middlewares/tokenExtractor')
 
 /** Utils */
 const logger = require('./utils/logger')
@@ -32,6 +34,8 @@ mongoose
 app.use(cors())
 app.use(express.json())
 app.use(requestLogger)
+app.use(tokenExtractor)
+// app.use(tokenDecoder)
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
