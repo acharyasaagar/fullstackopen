@@ -2,6 +2,12 @@ const mongoose = require('mongoose')
 const uniqValidator = require('mongoose-unique-validator')
 
 const userSchema = mongoose.Schema({
+  blogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Blog',
+    },
+  ],
   name: {
     minlength: 3,
     required: true,
