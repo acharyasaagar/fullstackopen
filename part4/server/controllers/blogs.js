@@ -48,23 +48,52 @@ blogsRouter.post('/', async (req, res) => {
 })
 
 blogsRouter.delete('/:id', async (req, res) => {
-  try {
-    await Blog.findByIdAndRemove(req.params.id)
-    return res.status(204).end()
-  } catch (err) {
-    return res.status(500).send({ err: 'server error occured' })
+  const decodedToken = req.token
+    ? await jwt.verify(req.token, JWT_SECRET)
+    : null
+  if (!(req.token && decodedToken)) {
+    return res.status(401).send({ err: 'Unauthorized' })
   }
+
+  const user = await User.findById(decodedToken.id)
+  const blog = await Blog.findById(req.params.id)
+
+  if (blog) {
+    if (blog.user.toString() === user._id.toString()) {
+      await Blog.findByIdAndRemove(req.params.id)
+      user.blogs = user.blogs.filter(
+        blog => blog._id.toString() === req.params.id
+      )
+      return res.status(204).end()
+    }
+    return res.status(401).send({ err: 'Unauthorized' })
+  }
+  return res.status(500).send({ err: 'Server Error' })
 })
 
 blogsRouter.put('/:id', async (req, res) => {
-  try {
-    const updated = await Blog.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      context: 'query',
-    })
-    return res.json(updated)
-  } catch (err) {
-    return res.status(500).send({ err: 'server error occured' })
+  const decodedToken = req.token
+    ? await jwt.verify(req.token, JWT_SECRET)
+    : null
+  if (!(req.token && decodedToken)) {
+    return res.status(401).send({ err: 'Unauthorized' })
   }
+
+  const user = await User.findById(decodedToken.id)
+  const blog = await Blog.findById(req.params.id)
+
+  if (blog) {
+    if (blog.user.toString() === user._id.toString()) {
+      const updatedBlog = await Blog.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+      )
+      return res.json(updatedBlog)
+    }
+    return res.status(401).send({ err: 'Unauthorized' })
+  }
+  return res.status(500).send({ err: 'Server Error' })
 })
+
 module.exports = blogsRouter

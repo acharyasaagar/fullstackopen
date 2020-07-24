@@ -3,14 +3,14 @@ const supertest = require('supertest')
 
 const app = require('../app')
 const User = require('../models/user')
-const userFactory = require('./userFactory')
+const userFactory = require('./factories/userFactory')
 
 const api = supertest(app)
 
 const initialUserCount = 2
 
 beforeEach(async () => {
-  const fakeUsers = userFactory.getFakeUsers(initialUserCount)
+  const fakeUsers = userFactory(initialUserCount)
   await User.deleteMany({})
   for (let fakeUser of fakeUsers) {
     const user = new User(fakeUser)
