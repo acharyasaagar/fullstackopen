@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types'
 import React, { useRef, useState } from 'react'
 
 import Toggleable from './Toggleable'
 
 const Blog = props => {
-  const [blogExpanded, setBlogExpanded] = useState(false)
   const { blog, deleteBlog, updateBlog, user } = props
+  const [blogExpanded, setBlogExpanded] = useState(false)
   const blogRef = useRef()
 
   const handleToggle = () => {
@@ -22,7 +23,7 @@ const Blog = props => {
   }
 
   const handleDeleteBlog = blog => {
-    return async e => {
+    return async () => {
       const confirmed = window.confirm(`Remove blog: ${blog.title}`)
       if (confirmed) await deleteBlog(blog.id)
     }
@@ -83,6 +84,13 @@ const Blog = props => {
       </div>
     </>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+  updateBlog: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 export default Blog

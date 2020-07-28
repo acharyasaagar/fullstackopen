@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 
 const User = props => {
@@ -13,6 +14,11 @@ const User = props => {
       <button onClick={handleLogout}>logout</button>
     </div>
   )
+}
+
+User.propTypes = {
+  user: PropTypes.object.isRequired,
+  handleLogout: PropTypes.func.isRequired,
 }
 
 export default User
