@@ -14,6 +14,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [err, setErr] = useState(null)
 
+  const sortedBlogs = blogs.sort((first, second) => second.likes - first.likes)
+
   const checkLoggedUser = () => {
     const user = window.localStorage.getItem('loggedUser')
     setUser(JSON.parse(user))
@@ -96,7 +98,7 @@ const App = () => {
             </Toggleable>
           </div>
 
-          {blogs.map(blog => (
+          {sortedBlogs.map(blog => (
             <Blog blog={blog} updateBlog={updateBlog} key={blog.id} />
           ))}
         </>
