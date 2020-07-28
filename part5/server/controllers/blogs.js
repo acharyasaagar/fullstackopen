@@ -40,11 +40,15 @@ blogsRouter.post('/', async (req, res) => {
     user: user._id,
   }
   const blog = new Blog(newBlog)
-  const savedBlog = await blog.save()
-  user.blogs = user.blogs.concat(savedBlog._id)
+  const { _id } = await blog.save()
+  user.blogs = user.blogs.concat(_id)
   await user.save()
-
-  res.status(201).json(savedBlog)
+  const savedBlog = await Blog.findOne({ _id }).populate('user', {
+    id: 1,
+    name: 1,
+    username: 1,
+  })
+  return res.status(201).json(savedBlog)
 })
 
 blogsRouter.delete('/:id', async (req, res) => {
@@ -84,11 +88,14 @@ blogsRouter.put('/:id', async (req, res) => {
 
   if (blog) {
     if (blog.user.toString() === user._id.toString()) {
-      const updatedBlog = await Blog.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true }
-      )
+      const { _id } = await Blog.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      })
+      const updatedBlog = await Blog.findOne({ _id }).populate('user', {
+        id: 1,
+        name: 1,
+        username: 1,
+      })
       return res.json(updatedBlog)
     }
     return res.status(401).send({ err: 'Unauthorized' })
