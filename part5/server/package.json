@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "front-end": "cd ../client && npm start",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "dev:app": "concurrently \"npm run dev\" \"npm run front-end\"",
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "chalk": "^4.1.0",
+    "concurrently": "^5.2.0",
     "faker": "^4.1.0",
     "jest": "^26.1.0",
     "nodemon": "^2.0.4"
