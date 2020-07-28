@@ -25,6 +25,9 @@ const CreateBlog = props => {
       setTimeout(() => setSuccess(null), 5000)
     } catch (err) {
       console.log(err.message)
+      setTitle('')
+      setUrl('')
+      setAuthor('')
       setErr({ message: err.message })
       setTimeout(() => setErr(null), 5000)
     }

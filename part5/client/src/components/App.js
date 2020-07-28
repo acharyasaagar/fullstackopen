@@ -35,9 +35,7 @@ const App = () => {
       setBlogs(blogs.concat(data))
       blogFormRef.current.toggleVisibility()
     } catch (err) {
-      console.log(err)
-      setErr({ message: 'Error liking blog' })
-      setTimeout(() => setErr(null), 5000)
+      throw new Error('Error creating blog')
     }
   }
 
