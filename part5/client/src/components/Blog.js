@@ -4,7 +4,7 @@ import Toggleable from './Toggleable'
 
 const Blog = props => {
   const [blogExpanded, setBlogExpanded] = useState(false)
-  const { blog, updateBlog } = props
+  const { blog, deleteBlog, updateBlog, user } = props
   const blogRef = useRef()
 
   const handleToggle = () => {
@@ -18,6 +18,13 @@ const Blog = props => {
       const updatedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id }
       delete updatedBlog.id
       await updateBlog(updatedBlog, blogId)
+    }
+  }
+
+  const handleDeleteBlog = blog => {
+    return async e => {
+      const confirmed = window.confirm(`Remove blog: ${blog.title}`)
+      if (confirmed) await deleteBlog(blog.id)
     }
   }
 
@@ -53,13 +60,23 @@ const Blog = props => {
                 </button>
               </p>
             </div>
-            <div>
+            <div className="v-flex">
               <button onClick={handleToggle}>
                 hide blog
                 <span role="img" aria-label="blog link">
                   &nbsp;&#128314;
                 </span>
               </button>
+              {user.id === blog.user.id ? (
+                <button onClick={handleDeleteBlog(blog)}>
+                  delete
+                  <span role="img" aria-label="blog delete">
+                    &nbsp;&nbsp;&nbsp;🗑
+                  </span>
+                </button>
+              ) : (
+                ''
+              )}
             </div>
           </section>
         </Toggleable>

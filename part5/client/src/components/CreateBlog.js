@@ -3,12 +3,11 @@ import React, { useState } from 'react'
 import Notification from './Notification'
 
 const CreateBlog = props => {
-  const { createBlog } = props
+  const { createBlog, setSuccess } = props
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
   const [err, setErr] = useState(null)
-  const [success, setSuccess] = useState(null)
 
   const handleAddBlog = async e => {
     e.preventDefault()
@@ -45,7 +44,7 @@ const CreateBlog = props => {
 
   return (
     <div>
-      <Notification err={err} success={success} />
+      <Notification err={err} />
       <h4>
         Create Blog
         <span role="img" aria-label="user emoji">

@@ -13,6 +13,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [err, setErr] = useState(null)
+  const [success, setSuccess] = useState(null)
 
   const sortedBlogs = blogs.sort((first, second) => second.likes - first.likes)
 
@@ -51,6 +52,17 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async blogId => {
+    try {
+      await blogService.remove(blogId)
+      setBlogs(blogs.filter(blog => blog.id !== blogId))
+    } catch (err) {
+      console.log(err)
+      setErr({ message: 'Error deleting blog' })
+      setTimeout(() => setErr(null), 5000)
+    }
+  }
+
   useEffect(populateBlogs, [])
   useEffect(checkLoggedUser, [])
 
@@ -71,7 +83,7 @@ const App = () => {
 
   return (
     <>
-      <Notification err={err} />
+      <Notification err={err} success={success} />
       {user === null ? loginForm() : showUser(user)}
       <br></br>
       <br></br>
@@ -94,12 +106,18 @@ const App = () => {
               showCancelButton={true}
               ref={blogFormRef}
             >
-              <CreateBlog createBlog={createBlog} />
+              <CreateBlog createBlog={createBlog} setSuccess={setSuccess} />
             </Toggleable>
           </div>
 
           {sortedBlogs.map(blog => (
-            <Blog blog={blog} updateBlog={updateBlog} key={blog.id} />
+            <Blog
+              blog={blog}
+              updateBlog={updateBlog}
+              deleteBlog={deleteBlog}
+              key={blog.id}
+              user={user}
+            />
           ))}
         </>
       )}

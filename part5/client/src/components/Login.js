@@ -25,6 +25,7 @@ const Login = props => {
       const user = Object.assign({}, res.data)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUser(user)
+      authService.setToken(user.token)
     } catch (e) {
       setErr({ message: 'Invalid Credentials' })
       setTimeout(() => setErr(null), 5000)

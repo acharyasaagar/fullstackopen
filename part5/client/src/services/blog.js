@@ -1,20 +1,24 @@
 import axios from 'axios'
-import authService from './auth'
 
 const baseUrl = '/api/blogs'
-const authToken = authService.getBearerTokenFromLocalStorage()
 
-const config = {
+const token = () => JSON.parse(window.localStorage.loggedUser).token
+
+const bearerToken = () => `bearer ${token()}`
+
+const config = () => ({
   headers: {
-    Authorization: authToken,
+    Authorization: bearerToken(),
   },
-}
+})
 
 const getAll = async () => axios.get(baseUrl)
 
-const create = async payload => axios.post(baseUrl, payload, config)
+const create = async payload => axios.post(baseUrl, payload, config())
+
+const remove = async blogId => axios.delete(`${baseUrl}/${blogId}`, config())
 
 const update = async (payload, id) =>
-  axios.put(`${baseUrl}/${id}`, payload, config)
+  axios.put(`${baseUrl}/${id}`, payload, config())
 
-export default { create, getAll, update }
+export default { create, remove, getAll, update }
