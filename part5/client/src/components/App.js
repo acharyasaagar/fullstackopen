@@ -72,7 +72,7 @@ const App = () => {
   }
 
   const loginForm = () => (
-    <Toggleable buttonLabel="log in" showButton={true} showCancelButton={true}>
+    <Toggleable actionButtonLabel="log in" cancelButtonLabel="cancel">
       <Login setUser={setUser} />
     </Toggleable>
   )
@@ -99,9 +99,8 @@ const App = () => {
           <br></br>
           <div className="panel">
             <Toggleable
-              buttonLabel="Create a new blog"
-              showButton={true}
-              showCancelButton={true}
+              actionButtonLabel="Create a new blog"
+              cancelButtonLabel="close &nbsp;&nbsp;✖️"
               ref={blogFormRef}
             >
               <CreateBlog createBlog={createBlog} setSuccess={setSuccess} />

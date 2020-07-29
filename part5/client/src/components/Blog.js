@@ -32,16 +32,21 @@ const Blog = props => {
   return (
     <>
       <div className="panel">
-        <div className={` ${blogExpanded ? 'd-none' : 'flex'}`}>
-          <h3 className="title">{blog.title}</h3>
-          <button onClick={handleToggle}>
+        <div
+          className={` ${blogExpanded ? 'd-none' : 'flex'}`}
+          data-test="blog-preview"
+        >
+          <h3 className="title" data-test="blog-preview-title">
+            {blog.title}
+          </h3>
+          <button onClick={handleToggle} data-test="view-blog-button">
             view blog
             <span role="img" aria-label="blog link">
               &nbsp;🔻
             </span>
           </button>
         </div>
-        <Toggleable ref={blogRef} buttonLabel="View">
+        <Toggleable ref={blogRef}>
           <section className="flex">
             <div>
               <p className="title">{blog.title}</p>
@@ -53,7 +58,11 @@ const Blog = props => {
               </p>
               <p className="subtitle">
                 <span> {blog.author} </span>
-                <button className="meta" onClick={handleLikeBlog(blog.id)}>
+                <button
+                  className="meta"
+                  data-test="like-blog-button"
+                  onClick={handleLikeBlog(blog.id)}
+                >
                   <span role="img" aria-label="blog link">
                     &nbsp;&nbsp;&#128420;&nbsp;&nbsp;
                   </span>
@@ -62,7 +71,7 @@ const Blog = props => {
               </p>
             </div>
             <div className="v-flex">
-              <button onClick={handleToggle}>
+              <button onClick={handleToggle} data-test="hide-blog-button">
                 hide blog
                 <span role="img" aria-label="blog link">
                   &nbsp;&#128314;

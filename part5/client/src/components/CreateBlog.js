@@ -55,10 +55,11 @@ const CreateBlog = props => {
           &nbsp;&nbsp;📝
         </span>
       </h4>
-      <form onSubmit={handleAddBlog}>
+      <form onSubmit={handleAddBlog} data-test="create-blog-form">
         <section>
           <label htmlFor="title">Blog Title:</label>
           <input
+            data-test="blog-title-input"
             type="text"
             name="title"
             value={title}
@@ -68,6 +69,7 @@ const CreateBlog = props => {
         <section>
           <label htmlFor="url">Blog URL: </label>
           <input
+            data-test="blog-url-input"
             value={url}
             type="text"
             name="url"
@@ -77,13 +79,14 @@ const CreateBlog = props => {
         <section>
           <label htmlFor="author">Author: </label>
           <input
+            data-test="blog-author-input"
             value={author}
             type="text"
             name="author"
             onChange={handleAuthorChange}
           />
         </section>
-        <button type="submit">
+        <button type="submit" data-test="blog-add-button">
           add blog
           <span role="img" aria-label="user emoji">
             &nbsp;&nbsp;➕
