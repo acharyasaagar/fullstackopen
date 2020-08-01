@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "front-end": "cd ../client && npm start",
-    "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "dev:app": "concurrently \"npm run dev\" \"npm run front-end\"",
+    "app": "concurrently \"npm run start:dev\" \"npm run front-end\"",
     "start": "cross-env NODE_ENV=production node index.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon index.js",
+    "start:test": "cross-env NODE_ENV=test node index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "keywords": [],
