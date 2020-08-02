@@ -49,16 +49,16 @@ const App = () => {
     }
   }
 
-  const updateBlog = async (updatedBlog, blogId) => {
-    try {
-      const { data } = await blogService.update(updatedBlog, blogId)
-      setBlogs(blogs.filter(blog => blog.id !== blogId).concat(data))
-    } catch (err) {
-      console.log(err)
-      setErr({ message: 'Error updating blog' })
-      setTimeout(() => setErr(null), 5000)
-    }
-  }
+  // const updateBlog = async (updatedBlog, blogId) => {
+  //   try {
+  //     const { data } = await blogService.update(updatedBlog, blogId)
+  //     setBlogs(blogs.filter(blog => blog.id !== blogId).concat(data))
+  //   } catch (err) {
+  //     console.log(err)
+  //     setErr({ message: 'Error updating blog' })
+  //     setTimeout(() => setErr(null), 5000)
+  //   }
+  // }
 
   const deleteBlog = async blogId => {
     try {
