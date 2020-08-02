@@ -225,6 +225,26 @@ describe('Blogs Api', () => {
         .expect(200)
     })
 
+    it('should increse likes when patch req is done with likes object', async () => {
+      const newBlog = blogFactory()
+
+      const { body } = await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .set('Authorization', bearerToken)
+        .expect(201)
+
+      const blogId = body.id
+      const payload = { likes: 'like' }
+
+      const res = await api
+        .patch(`/api/blogs/${blogId}`)
+        .send(payload)
+        .expect(200)
+
+      expect(res.body.likes).toBe(newBlog.likes + 1)
+    })
+
     it('should not update the blog when invalid id is given', async () => {
       await api
         .put(`/api/blogs/gibberish-id-here`)
