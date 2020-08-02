@@ -28,7 +28,6 @@ const App = () => {
     }
     getBlogs()
   }
-
   const createBlog = async blog => {
     try {
       const { data } = await blogService.create(blog)
@@ -39,13 +38,24 @@ const App = () => {
     }
   }
 
+  const likeBlog = async blogId => {
+    try {
+      const { data } = await blogService.like(blogId)
+      setBlogs(blogs.filter(blog => blog.id !== blogId).concat(data))
+    } catch (err) {
+      console.log(err)
+      setErr({ message: 'Error liking blog' })
+      setTimeout(() => setErr(null), 5000)
+    }
+  }
+
   const updateBlog = async (updatedBlog, blogId) => {
     try {
       const { data } = await blogService.update(updatedBlog, blogId)
       setBlogs(blogs.filter(blog => blog.id !== blogId).concat(data))
     } catch (err) {
       console.log(err)
-      setErr({ message: 'Error liking blog' })
+      setErr({ message: 'Error updating blog' })
       setTimeout(() => setErr(null), 5000)
     }
   }
@@ -110,7 +120,7 @@ const App = () => {
           {sortedBlogs.map(blog => (
             <Blog
               blog={blog}
-              updateBlog={updateBlog}
+              likeBlog={likeBlog}
               deleteBlog={deleteBlog}
               key={blog.id}
               user={user}

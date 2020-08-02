@@ -12,13 +12,15 @@ const config = () => ({
   },
 })
 
-const getAll = async () => axios.get(baseUrl)
+const getAll = () => axios.get(baseUrl)
 
-const create = async payload => axios.post(baseUrl, payload, config())
+const create = payload => axios.post(baseUrl, payload, config())
 
-const remove = async blogId => axios.delete(`${baseUrl}/${blogId}`, config())
+const like = blogId => axios.patch(`${baseUrl}/${blogId}`, { likes: 'like' })
 
-const update = async (payload, id) =>
-  axios.put(`${baseUrl}/${id}`, payload, config())
+const remove = blogId => axios.delete(`${baseUrl}/${blogId}`, config())
 
-export default { create, remove, getAll, update }
+const update = (payload, blogId) =>
+  axios.put(`${baseUrl}/${blogId}`, payload, config())
+
+export default { create, getAll, like, remove, update }

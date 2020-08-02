@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react'
 import Toggleable from './Toggleable'
 
 const Blog = props => {
-  const { blog, deleteBlog, updateBlog, user } = props
+  const { blog, deleteBlog, likeBlog, user } = props
   const [blogExpanded, setBlogExpanded] = useState(false)
   const blogRef = useRef()
 
@@ -13,12 +13,10 @@ const Blog = props => {
     blogRef.current.toggleVisibility()
   }
 
-  const handleLikeBlog = blogId => {
+  const handleLikeBlog = blog => {
     return async e => {
       e.target.blur()
-      const updatedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id }
-      delete updatedBlog.id
-      await updateBlog(updatedBlog, blogId)
+      await likeBlog(blog.id)
     }
   }
 
@@ -61,7 +59,7 @@ const Blog = props => {
                 <button
                   className="meta"
                   data-test="like-blog-button"
-                  onClick={handleLikeBlog(blog.id)}
+                  onClick={handleLikeBlog(blog)}
                 >
                   <span role="img" aria-label="blog link">
                     &nbsp;&nbsp;&#128420;&nbsp;&nbsp;
@@ -77,7 +75,7 @@ const Blog = props => {
                   &nbsp;&#128314;
                 </span>
               </button>
-              {user.id === blog.user.id ? (
+              {blog.user && user.id === blog.user.id ? (
                 <button onClick={handleDeleteBlog(blog)}>
                   delete
                   <span role="img" aria-label="blog delete">
