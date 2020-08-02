@@ -6,6 +6,7 @@ require('express-async-errors')
 /** Models */
 const blogsRouter = require('./controllers/blogs')
 const loginRouter = require('./controllers/login')
+const testingRouter = require('./controllers/testing')
 const usersRouter = require('./controllers/users')
 
 /** Custom Middlewares */
@@ -40,6 +41,9 @@ app.use(tokenExtractor)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing', testingRouter)
+}
 
 app.use(errorHandler)
 
