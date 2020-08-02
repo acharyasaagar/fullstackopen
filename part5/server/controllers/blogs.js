@@ -63,7 +63,6 @@ blogsRouter.delete('/:id', async (req, res) => {
   const blog = await Blog.findById(req.params.id)
 
   if (blog) {
-    console.log(blog.user.toString(), user._id.toString())
     if (blog.user.toString() === user._id.toString()) {
       await Blog.findByIdAndRemove(req.params.id)
       user.blogs = user.blogs.filter(
@@ -77,19 +76,22 @@ blogsRouter.delete('/:id', async (req, res) => {
 })
 
 blogsRouter.put('/:id', async (req, res) => {
+  const payload = {
+    ...req.body,
+    user: req.body.user.id,
+  }
   const decodedToken = req.token
     ? await jwt.verify(req.token, JWT_SECRET)
     : null
   if (!(req.token && decodedToken)) {
     return res.status(401).send({ err: 'Unauthorized' })
   }
-
   const user = await User.findById(decodedToken.id)
   const blog = await Blog.findById(req.params.id)
 
   if (blog) {
     if (blog.user.toString() === user._id.toString()) {
-      const { _id } = await Blog.findByIdAndUpdate(req.params.id, req.body, {
+      const { _id } = await Blog.findByIdAndUpdate(req.params.id, payload, {
         new: true,
       })
       const updatedBlog = await Blog.findOne({ _id }).populate('user', {
