@@ -3,3 +3,4 @@ react-barebone/
 **/node_modules/
 .prettierrc
 **/.env
+**/cypress/videos
