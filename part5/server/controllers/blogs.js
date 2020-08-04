@@ -76,9 +76,9 @@ blogsRouter.delete('/:id', async (req, res) => {
 })
 
 blogsRouter.put('/:id', async (req, res) => {
+  console.log(req.body)
   const payload = {
     ...req.body,
-    user: req.body.user.id,
   }
   const decodedToken = req.token
     ? await jwt.verify(req.token, JWT_SECRET)
@@ -91,6 +91,7 @@ blogsRouter.put('/:id', async (req, res) => {
 
   // likes should not be changed by put
   payload.likes = blog.likes
+  payload.user = user._id.toString()
 
   if (blog) {
     if (blog.user.toString() === user._id.toString()) {
