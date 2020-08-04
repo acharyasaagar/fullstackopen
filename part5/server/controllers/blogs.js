@@ -76,7 +76,6 @@ blogsRouter.delete('/:id', async (req, res) => {
 })
 
 blogsRouter.put('/:id', async (req, res) => {
-  console.log(req.body)
   const payload = {
     ...req.body,
   }
