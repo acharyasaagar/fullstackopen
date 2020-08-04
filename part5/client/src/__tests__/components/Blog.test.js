@@ -1,19 +1,15 @@
 import React from 'react'
-import { render, prettyDOM, fireEvent } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 import Blog from '../../components/Blog'
 
 describe('<Blog /> component', () => {
-  let blogComponent
-  let deleteBlog
-  let updateBlog
-  let user
-  let blog
+  let blogComponent, deleteBlog, likeBlog, user, blog
 
   beforeEach(() => {
     deleteBlog = jest.fn()
-    updateBlog = jest.fn()
+    likeBlog = jest.fn()
 
     user = {
       id: 1,
@@ -33,7 +29,7 @@ describe('<Blog /> component', () => {
         blog={blog}
         user={user}
         deleteBlog={deleteBlog}
-        updateBlog={updateBlog}
+        likeBlog={likeBlog}
       />
     )
   })
@@ -69,14 +65,14 @@ describe('<Blog /> component', () => {
     expect(togglableContentDiv).toHaveStyle('display: block')
   })
 
-  it('should call updateBlog twice when like button is clicked twice', () => {
+  it('should call likeBlog twice when like button is clicked twice', () => {
     const likeBlogButton = blogComponent.container.querySelector(
       '[data-test="like-blog-button"]'
     )
     fireEvent.click(likeBlogButton)
-    expect(updateBlog.mock.calls).toHaveLength(1)
+    expect(likeBlog.mock.calls).toHaveLength(1)
 
     fireEvent.click(likeBlogButton)
-    expect(updateBlog.mock.calls).toHaveLength(2)
+    expect(likeBlog.mock.calls).toHaveLength(2)
   })
 })

@@ -1,24 +1,17 @@
 import React from 'react'
-import { render, prettyDOM, fireEvent } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 import CreateBlog from '../../components/CreateBlog'
 import { act } from 'react-dom/test-utils'
 
 describe('<CreateBlog />', () => {
-  let blog, createBlog, createBlogComponent, promise, qs, setSuccess, user
+  let blog, createBlog, createBlogComponent, promise, qs, setSuccess
   beforeEach(() => {
     promise = Promise.resolve()
 
     createBlog = jest.fn(() => promise)
     setSuccess = jest.fn()
-
-    user = {
-      id: 1,
-      name: 'Mary Jane',
-      username: 'mjane',
-    }
-
     blog = {
       title: 'Blog title lorem',
       author: 'John Doe',
