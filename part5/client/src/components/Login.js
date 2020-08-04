@@ -43,6 +43,7 @@ const Login = props => {
           <input
             type="text"
             name="username"
+            data-test="login-username-input"
             value={username}
             onChange={handleUsernameChange}
           />
@@ -50,13 +51,16 @@ const Login = props => {
         <section>
           <label htmlFor="password">Password: </label>
           <input
-            value={password}
             type="password"
             name="password"
+            data-test="login-password-input"
+            value={password}
             onChange={handlePasswordChange}
           />
         </section>
-        <button type="submit">Log in</button>
+        <button type="submit" data-test="login-button">
+          Log in
+        </button>
       </form>
     </div>
   )

@@ -116,16 +116,17 @@ const App = () => {
               <CreateBlog createBlog={createBlog} setSuccess={setSuccess} />
             </Toggleable>
           </div>
-
-          {sortedBlogs.map(blog => (
-            <Blog
-              blog={blog}
-              likeBlog={likeBlog}
-              deleteBlog={deleteBlog}
-              key={blog.id}
-              user={user}
-            />
-          ))}
+          <div id="blogs">
+            {sortedBlogs.map(blog => (
+              <Blog
+                blog={blog}
+                likeBlog={likeBlog}
+                deleteBlog={deleteBlog}
+                key={blog.id}
+                user={user}
+              />
+            ))}
+          </div>
         </>
       )}
     </>

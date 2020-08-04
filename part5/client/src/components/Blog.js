@@ -29,7 +29,7 @@ const Blog = props => {
 
   return (
     <>
-      <div className="panel">
+      <div className="panel blog" id={`${blog.id}`}>
         <div
           className={` ${blogExpanded ? 'd-none' : 'flex'}`}
           data-test="blog-preview"
@@ -37,7 +37,11 @@ const Blog = props => {
           <h3 className="title" data-test="blog-preview-title">
             {blog.title}
           </h3>
-          <button onClick={handleToggle} data-test="view-blog-button">
+          <button
+            onClick={handleToggle}
+            data-test="view-blog-button"
+            id={`view-blog-${blog.id}`}
+          >
             view blog
             <span role="img" aria-label="blog link">
               &nbsp;🔻
@@ -76,7 +80,10 @@ const Blog = props => {
                 </span>
               </button>
               {blog.user && user.id === blog.user.id ? (
-                <button onClick={handleDeleteBlog(blog)}>
+                <button
+                  data-test="delete-blog-button"
+                  onClick={handleDeleteBlog(blog)}
+                >
                   delete
                   <span role="img" aria-label="blog delete">
                     &nbsp;&nbsp;&nbsp;🗑

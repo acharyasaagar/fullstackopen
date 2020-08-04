@@ -11,7 +11,9 @@ const User = props => {
         </span>
         Logged in as: <span className="title"> {user.username}</span>
       </p>
-      <button onClick={handleLogout}>logout</button>
+      <button id="logout-button" onClick={handleLogout}>
+        logout
+      </button>
     </div>
   )
 }
