@@ -1,8 +1,19 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { useDispatch } from 'react-redux'
+
+import { setUserAction } from '../store/actions'
 
 const User = props => {
-  const { user, handleLogout } = props
+  const { user } = props
+
+  const dispatch = useDispatch()
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedUser')
+    dispatch(setUserAction(null))
+  }
+
   return (
     <div className="flex panel">
       <p className="subtitle">
@@ -20,7 +31,6 @@ const User = props => {
 
 User.propTypes = {
   user: PropTypes.object.isRequired,
-  handleLogout: PropTypes.func.isRequired,
 }
 
 export default User

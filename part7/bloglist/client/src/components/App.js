@@ -7,39 +7,29 @@ import Login from './Login'
 import Notification from './Notification'
 import User from './User'
 
-import blogService from '../services/blog'
 import Toggleable from './Toggleable'
 
 import { initBlogs } from '../store/async-actions'
+import { setUserAction } from '../store/actions'
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const [err, setErr] = useState(null)
   const [success, setSuccess] = useState(null)
 
   const dispatch = useDispatch()
 
-  const setBlogs = () => 'blog'
-
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
 
   const sortedBlogs = blogs.sort((first, second) => second.likes - first.likes)
 
   const checkLoggedUser = () => {
-    const user = window.localStorage.getItem('loggedUser')
-    setUser(JSON.parse(user))
+    const user = JSON.parse(window.localStorage.loggedUser || null)
+    dispatch(setUserAction(user))
   }
+
   const populateBlogs = () => {
     dispatch(initBlogs())
-  }
-  const createBlog = async blog => {
-    try {
-      const { data } = await blogService.create(blog)
-      setBlogs(blogs.concat(data))
-      blogFormRef.current.toggleVisibility()
-    } catch (err) {
-      throw new Error('Error creating blog')
-    }
   }
 
   useEffect(populateBlogs, [])
@@ -47,18 +37,13 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    setUser(null)
-  }
-
   const loginForm = () => (
     <Toggleable actionButtonLabel="log in" cancelButtonLabel="cancel">
-      <Login setUser={setUser} />
+      <Login />
     </Toggleable>
   )
 
-  const showUser = user => <User user={user} handleLogout={handleLogout} />
+  const showUser = user => <User user={user} />
 
   return (
     <>
@@ -81,7 +66,7 @@ const App = () => {
             cancelButtonLabel="close &nbsp;&nbsp;✖️"
             ref={blogFormRef}
           >
-            <CreateBlog createBlog={createBlog} setSuccess={setSuccess} />
+            <CreateBlog setSuccess={setSuccess} />
           </Toggleable>
           <div id="blogs">
             {sortedBlogs.map(blog => (

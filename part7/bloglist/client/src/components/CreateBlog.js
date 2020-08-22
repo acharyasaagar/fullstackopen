@@ -102,7 +102,6 @@ const CreateBlog = props => {
 }
 
 CreateBlog.propTypes = {
-  createBlog: PropTypes.func.isRequired,
   setSuccess: PropTypes.func.isRequired,
 }
 

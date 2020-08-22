@@ -1,10 +1,12 @@
 import blogService from '../../services/blog'
+import authService from '../../services/auth'
 
 import {
   initBlogsAction,
   addBlogAction,
   likeBlogAction,
   deleteBlogAction,
+  setUserAction,
 } from '../actions'
 
 export const initBlogs = () => {
@@ -22,7 +24,6 @@ export const initBlogs = () => {
 export const addBlog = blog => {
   return async dispatch => {
     try {
-      console.log('dispatching add blog ...')
       const savedBlog = (await blogService.create(blog)).data
       return dispatch(addBlogAction(savedBlog))
     } catch (err) {
@@ -52,6 +53,19 @@ export const deleteBlog = blog => {
       throw new Error('Error deleting blog')
     } catch (err) {
       console.log(err)
+    }
+  }
+}
+
+export const loginUser = credentials => {
+  return async dispatch => {
+    try {
+      const user = (await authService.login(credentials)).data
+      dispatch(setUserAction(user))
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+    } catch (err) {
+      window.localStorage.removeItem('loggedUser')
+      dispatch(setUserAction(null))
     }
   }
 }

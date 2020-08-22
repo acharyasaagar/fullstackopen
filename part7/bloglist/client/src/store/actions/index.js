@@ -17,3 +17,8 @@ export const deleteBlogAction = blog => ({
   type: 'DELETE_BLOG',
   data: blog,
 })
+
+export const setUserAction = user => ({
+  type: 'SET_USER',
+  data: user,
+})
