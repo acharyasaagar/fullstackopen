@@ -21,7 +21,7 @@ const App = () => {
 
   const setBlogs = () => 'blog'
 
-  const blogs = useSelector(state => state)
+  const blogs = useSelector(state => state.blogs)
 
   const sortedBlogs = blogs.sort((first, second) => second.likes - first.likes)
 
