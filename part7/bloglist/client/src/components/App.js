@@ -42,17 +42,6 @@ const App = () => {
     }
   }
 
-  const deleteBlog = async blogId => {
-    try {
-      await blogService.remove(blogId)
-      setBlogs(blogs.filter(blog => blog.id !== blogId))
-    } catch (err) {
-      console.log(err)
-      setErr({ message: 'Error deleting blog' })
-      setTimeout(() => setErr(null), 5000)
-    }
-  }
-
   useEffect(populateBlogs, [])
   useEffect(checkLoggedUser, [])
 
@@ -96,12 +85,7 @@ const App = () => {
           </Toggleable>
           <div id="blogs">
             {sortedBlogs.map(blog => (
-              <Blog
-                blog={blog}
-                deleteBlog={deleteBlog}
-                key={blog.id}
-                user={user}
-              />
+              <Blog blog={blog} key={blog.id} user={user} />
             ))}
           </div>
         </>

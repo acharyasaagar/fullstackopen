@@ -1,6 +1,11 @@
 import blogService from '../../services/blog'
 
-import { initBlogsAction, addBlogAction, likeBlogAction } from '../actions'
+import {
+  initBlogsAction,
+  addBlogAction,
+  likeBlogAction,
+  deleteBlogAction,
+} from '../actions'
 
 export const initBlogs = () => {
   return async dispatch => {
@@ -31,6 +36,20 @@ export const likeBlog = blog => {
     try {
       const likedBlog = (await blogService.like(blog)).data
       return dispatch(likeBlogAction(likedBlog))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+export const deleteBlog = blog => {
+  return async dispatch => {
+    try {
+      const deletedBlog = await blogService.remove(blog)
+      if (deletedBlog.status === 204) {
+        return dispatch(deleteBlogAction(blog))
+      }
+      throw new Error('Error deleting blog')
     } catch (err) {
       console.log(err)
     }

@@ -12,3 +12,8 @@ export const likeBlogAction = blog => ({
   type: 'LIKE_BLOG',
   data: blog,
 })
+
+export const deleteBlogAction = blog => ({
+  type: 'DELETE_BLOG',
+  data: blog,
+})

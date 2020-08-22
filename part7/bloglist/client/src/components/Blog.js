@@ -3,11 +3,11 @@ import React, { useRef, useState } from 'react'
 
 import Toggleable from './Toggleable'
 
-import { likeBlog } from '../store/async-actions'
+import { likeBlog, deleteBlog } from '../store/async-actions'
 import { useDispatch } from 'react-redux'
 
 const Blog = props => {
-  const { blog, deleteBlog, user } = props
+  const { blog, user } = props
   const [blogExpanded, setBlogExpanded] = useState(false)
 
   const blogRef = useRef()
@@ -26,9 +26,9 @@ const Blog = props => {
   }
 
   const handleDeleteBlog = blog => {
-    return async () => {
+    return e => {
       const confirmed = window.confirm(`Remove blog: ${blog.title}`)
-      if (confirmed) await deleteBlog(blog.id)
+      if (confirmed) dispatch(deleteBlog(blog))
     }
   }
 
@@ -107,8 +107,6 @@ const Blog = props => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  deleteBlog: PropTypes.func.isRequired,
-  likeBlog: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 }
 
