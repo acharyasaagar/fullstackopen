@@ -1,5 +1,4 @@
 const blogsReducer = (state = [], action) => {
-  console.log(action)
   switch (action.type) {
     case 'INIT_BLOGS':
       return [...action.data]
@@ -9,6 +8,8 @@ const blogsReducer = (state = [], action) => {
       return state.map(blog =>
         blog.id === action.data.id ? action.data : blog
       )
+    case 'DELETE_BLOG':
+      return state.filter(blog => blog.id !== action.data.id)
     default:
       return state
   }
