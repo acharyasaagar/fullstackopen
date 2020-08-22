@@ -3,10 +3,15 @@ import React, { useRef, useState } from 'react'
 
 import Toggleable from './Toggleable'
 
+import { likeBlog } from '../store/async-actions'
+import { useDispatch } from 'react-redux'
+
 const Blog = props => {
-  const { blog, deleteBlog, likeBlog, user } = props
+  const { blog, deleteBlog, user } = props
   const [blogExpanded, setBlogExpanded] = useState(false)
+
   const blogRef = useRef()
+  const dispatch = useDispatch()
 
   const handleToggle = () => {
     setBlogExpanded(!blogExpanded)
@@ -14,9 +19,9 @@ const Blog = props => {
   }
 
   const handleLikeBlog = blog => {
-    return async e => {
+    return e => {
       e.target.blur()
-      await likeBlog(blog.id)
+      dispatch(likeBlog(blog))
     }
   }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import Blog from './Blog'
 import CreateBlog from './CreateBlog'
@@ -10,10 +10,14 @@ import User from './User'
 import blogService from '../services/blog'
 import Toggleable from './Toggleable'
 
+import { initBlogs } from '../store/async-actions'
+
 const App = () => {
   const [user, setUser] = useState(null)
   const [err, setErr] = useState(null)
   const [success, setSuccess] = useState(null)
+
+  const dispatch = useDispatch()
 
   const setBlogs = () => 'blog'
 
@@ -26,11 +30,7 @@ const App = () => {
     setUser(JSON.parse(user))
   }
   const populateBlogs = () => {
-    async function getBlogs() {
-      const blogs = await blogService.getAll()
-      setBlogs([...blogs.data])
-    }
-    getBlogs()
+    dispatch(initBlogs())
   }
   const createBlog = async blog => {
     try {
@@ -41,28 +41,6 @@ const App = () => {
       throw new Error('Error creating blog')
     }
   }
-
-  const likeBlog = async blogId => {
-    try {
-      const { data } = await blogService.like(blogId)
-      setBlogs(blogs.filter(blog => blog.id !== blogId).concat(data))
-    } catch (err) {
-      console.log(err)
-      setErr({ message: 'Error liking blog' })
-      setTimeout(() => setErr(null), 5000)
-    }
-  }
-
-  // const updateBlog = async (updatedBlog, blogId) => {
-  //   try {
-  //     const { data } = await blogService.update(updatedBlog, blogId)
-  //     setBlogs(blogs.filter(blog => blog.id !== blogId).concat(data))
-  //   } catch (err) {
-  //     console.log(err)
-  //     setErr({ message: 'Error updating blog' })
-  //     setTimeout(() => setErr(null), 5000)
-  //   }
-  // }
 
   const deleteBlog = async blogId => {
     try {
@@ -99,9 +77,7 @@ const App = () => {
       {user === null ? loginForm() : showUser(user)}
       <br></br>
       <br></br>
-      {user === null ? (
-        ''
-      ) : (
+      {user && (
         <>
           <h2>
             <span role="img" aria-label="blog emoji">
@@ -111,20 +87,17 @@ const App = () => {
           </h2>
           <br></br>
           <br></br>
-          <div className="panel">
-            <Toggleable
-              actionButtonLabel="Create a new blog"
-              cancelButtonLabel="close &nbsp;&nbsp;✖️"
-              ref={blogFormRef}
-            >
-              <CreateBlog createBlog={createBlog} setSuccess={setSuccess} />
-            </Toggleable>
-          </div>
+          <Toggleable
+            actionButtonLabel="Create a new blog"
+            cancelButtonLabel="close &nbsp;&nbsp;✖️"
+            ref={blogFormRef}
+          >
+            <CreateBlog createBlog={createBlog} setSuccess={setSuccess} />
+          </Toggleable>
           <div id="blogs">
             {sortedBlogs.map(blog => (
               <Blog
                 blog={blog}
-                likeBlog={likeBlog}
                 deleteBlog={deleteBlog}
                 key={blog.id}
                 user={user}

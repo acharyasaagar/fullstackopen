@@ -3,13 +3,17 @@ import React, { useState } from 'react'
 
 import Notification from './Notification'
 
+import { addBlog } from '../store/async-actions'
+import { useDispatch } from 'react-redux'
+
 const CreateBlog = props => {
-  const { createBlog, setSuccess } = props
+  const { setSuccess } = props
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
   const [err, setErr] = useState(null)
 
+  const dispatch = useDispatch()
   const handleAddBlog = async e => {
     e.preventDefault()
     const newBlog = {
@@ -18,7 +22,7 @@ const CreateBlog = props => {
       url,
     }
     try {
-      await createBlog(newBlog)
+      dispatch(addBlog(newBlog))
       setTitle('')
       setUrl('')
       setAuthor('')
