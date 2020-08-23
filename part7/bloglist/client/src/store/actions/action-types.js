@@ -1,0 +1,7 @@
+export const ADD_BLOG = 'ADD_BLOG'
+export const DELETE_BLOG = 'DELETE_BLOG'
+export const INIT_BLOGS = 'INIT_BLOGS'
+export const LIKE_BLOG = 'LIKE_BLOG'
+export const PUSH_NOTIFICATION = 'PUSH_NOTIFICATION'
+export const REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION'
+export const SET_USER = 'SET_USER'

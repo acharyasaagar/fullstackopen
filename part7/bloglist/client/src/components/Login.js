@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import Notification from './Notification'
-
 import { loginUser } from '../store/async-actions'
 
 const Login = props => {
@@ -10,7 +8,6 @@ const Login = props => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [err, setErr] = useState(null)
 
   const handlePasswordChange = e => {
     setPassword(e.target.value)
@@ -26,7 +23,6 @@ const Login = props => {
 
   return (
     <div className="panel">
-      <Notification err={err} success={null} />
       <h4>Login to application</h4>
       <form onSubmit={handleLogin}>
         <section>

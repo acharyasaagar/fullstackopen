@@ -1,17 +1,12 @@
-import PropTypes from 'prop-types'
 import React, { useState } from 'react'
-
-import Notification from './Notification'
 
 import { addBlog } from '../store/async-actions'
 import { useDispatch } from 'react-redux'
 
 const CreateBlog = props => {
-  const { setSuccess } = props
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
-  const [err, setErr] = useState(null)
 
   const dispatch = useDispatch()
   const handleAddBlog = async e => {
@@ -26,15 +21,11 @@ const CreateBlog = props => {
       setTitle('')
       setUrl('')
       setAuthor('')
-      setSuccess({ message: 'New Blog Created' })
-      setTimeout(() => setSuccess(null), 5000)
     } catch (err) {
       console.log(err.message)
       setTitle('')
       setUrl('')
       setAuthor('')
-      setErr({ message: err.message })
-      setTimeout(() => setErr(null), 5000)
     }
   }
 
@@ -52,7 +43,6 @@ const CreateBlog = props => {
 
   return (
     <div>
-      <Notification err={err} />
       <h4>
         Create Blog
         <span role="img" aria-label="user emoji">
@@ -99,10 +89,6 @@ const CreateBlog = props => {
       </form>
     </div>
   )
-}
-
-CreateBlog.propTypes = {
-  setSuccess: PropTypes.func.isRequired,
 }
 
 export default CreateBlog

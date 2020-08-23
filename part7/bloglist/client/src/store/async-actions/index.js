@@ -2,10 +2,12 @@ import blogService from '../../services/blog'
 import authService from '../../services/auth'
 
 import {
-  initBlogsAction,
   addBlogAction,
-  likeBlogAction,
   deleteBlogAction,
+  initBlogsAction,
+  likeBlogAction,
+  pushNotificationAction,
+  removeNotificationAction,
   setUserAction,
 } from '../actions'
 
@@ -25,9 +27,15 @@ export const addBlog = blog => {
   return async dispatch => {
     try {
       const savedBlog = (await blogService.create(blog)).data
-      return dispatch(addBlogAction(savedBlog))
+      dispatch(addBlogAction(savedBlog))
+      return dispatch(
+        setNotifications({
+          message: 'Blog Created Successfully!',
+          type: 'success',
+        })
+      )
     } catch (err) {
-      console.log(err)
+      return dispatch(setNotifications({ message: err.message, type: 'error' }))
     }
   }
 }
@@ -48,11 +56,20 @@ export const deleteBlog = blog => {
     try {
       const deletedBlog = await blogService.remove(blog)
       if (deletedBlog.status === 204) {
-        return dispatch(deleteBlogAction(blog))
+        dispatch(deleteBlogAction(blog))
+        return dispatch(
+          setNotifications({
+            message: 'Blog Deleted Successfully!',
+            type: 'success',
+          })
+        )
       }
       throw new Error('Error deleting blog')
     } catch (err) {
       console.log(err)
+      return dispatch(
+        setNotifications({ message: err.message, type: 'success' })
+      )
     }
   }
 }
@@ -66,6 +83,21 @@ export const loginUser = credentials => {
     } catch (err) {
       window.localStorage.removeItem('loggedUser')
       dispatch(setUserAction(null))
+    }
+  }
+}
+
+export const setNotifications = notification => {
+  return dispatch => {
+    try {
+      const now = Date.now()
+      const random = Math.floor(Math.random() * 10000)
+      const id = (now * random).toString(16)
+      const payload = { ...notification, id }
+      dispatch(pushNotificationAction(payload))
+      setTimeout(() => dispatch(removeNotificationAction(payload)), 3000)
+    } catch (err) {
+      dispatch(setNotifications({ message: 'Error occured', type: 'error' }))
     }
   }
 }

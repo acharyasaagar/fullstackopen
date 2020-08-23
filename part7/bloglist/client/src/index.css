@@ -72,25 +72,23 @@ button {
 }
 
 .error {
-  position: absolute;
-  top: 4px;
   color: red;
   background: lightgrey;
   font-size: 20px;
   border-style: solid;
   border-radius: 5px;
   padding: 10px;
+  margin-bottom: 4px;
 }
 
 .success {
-  position: absolute;
-  top: 4px;
   color: green;
   background: lightgrey;
   font-size: 20px;
   border-style: solid;
   border-radius: 5px;
   padding: 10px;
+  margin-bottom: 4px;
 }
 
 .d-none {

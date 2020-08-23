@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Blog from './Blog'
 import CreateBlog from './CreateBlog'
 import Login from './Login'
-import Notification from './Notification'
+import Notifications from './Notification'
 import User from './User'
 
 import Toggleable from './Toggleable'
@@ -13,9 +13,6 @@ import { initBlogs } from '../store/async-actions'
 import { setUserAction } from '../store/actions'
 
 const App = () => {
-  const [err, setErr] = useState(null)
-  const [success, setSuccess] = useState(null)
-
   const dispatch = useDispatch()
 
   const blogs = useSelector(state => state.blogs)
@@ -47,7 +44,7 @@ const App = () => {
 
   return (
     <>
-      <Notification err={err} success={success} />
+      <Notifications />
       {user === null ? loginForm() : showUser(user)}
       <br></br>
       <br></br>
@@ -66,7 +63,7 @@ const App = () => {
             cancelButtonLabel="close &nbsp;&nbsp;✖️"
             ref={blogFormRef}
           >
-            <CreateBlog setSuccess={setSuccess} />
+            <CreateBlog />
           </Toggleable>
           <div id="blogs">
             {sortedBlogs.map(blog => (
