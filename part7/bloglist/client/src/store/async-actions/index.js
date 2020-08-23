@@ -1,10 +1,12 @@
-import blogService from '../../services/blog'
 import authService from '../../services/auth'
+import blogService from '../../services/blog'
+import usersService from '../../services/users'
 
 import {
   addBlogAction,
   deleteBlogAction,
   initBlogsAction,
+  initUsersAction,
   likeBlogAction,
   pushNotificationAction,
   removeNotificationAction,
@@ -98,6 +100,19 @@ export const setNotifications = notification => {
       setTimeout(() => dispatch(removeNotificationAction(payload)), 3000)
     } catch (err) {
       dispatch(setNotifications({ message: 'Error occured', type: 'error' }))
+    }
+  }
+}
+
+export const initUsers = () => {
+  return async dispatch => {
+    try {
+      const users = (await usersService.getAll()).data
+      dispatch(initUsersAction(users))
+    } catch (err) {
+      dispatch(
+        setNotifications({ message: 'Error fetching users', type: 'error' })
+      )
     }
   }
 }

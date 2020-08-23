@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 import { addBlog } from '../store/async-actions'
-import { useDispatch } from 'react-redux'
 
 const CreateBlog = props => {
   const [title, setTitle] = useState('')
@@ -9,6 +10,7 @@ const CreateBlog = props => {
   const [author, setAuthor] = useState('')
 
   const dispatch = useDispatch()
+  const history = useHistory()
   const handleAddBlog = async e => {
     e.preventDefault()
     const newBlog = {
@@ -21,6 +23,7 @@ const CreateBlog = props => {
       setTitle('')
       setUrl('')
       setAuthor('')
+      history.push('/')
     } catch (err) {
       console.log(err.message)
       setTitle('')

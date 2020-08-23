@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import { setUserAction } from '../store/actions'
 
@@ -15,7 +16,7 @@ const User = props => {
   }
 
   return (
-    <div className="flex panel">
+    <div className="v-flex">
       <p className="subtitle">
         <span role="img" aria-label="user emoji">
           👤&nbsp;&nbsp;

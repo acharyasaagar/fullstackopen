@@ -1,7 +1,9 @@
 import {
   ADD_BLOG,
   DELETE_BLOG,
+  DESTROY_USERS,
   INIT_BLOGS,
+  INIT_USERS,
   LIKE_BLOG,
   PUSH_NOTIFICATION,
   SET_USER,
@@ -41,4 +43,13 @@ export const pushNotificationAction = notification => ({
 export const removeNotificationAction = notification => ({
   type: REMOVE_NOTIFICATION,
   data: notification,
+})
+
+export const initUsersAction = users => ({
+  type: INIT_USERS,
+  data: users,
+})
+
+export const destroyUsersAction = users => ({
+  type: DESTROY_USERS,
 })

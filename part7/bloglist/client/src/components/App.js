@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 
 import Blog from './Blog'
 import CreateBlog from './CreateBlog'
 import Login from './Login'
 import Notifications from './Notification'
 import User from './User'
+import Users from './Users'
 
 import Toggleable from './Toggleable'
 
@@ -45,32 +47,43 @@ const App = () => {
   return (
     <>
       <Notifications />
-      {user === null ? loginForm() : showUser(user)}
-      <br></br>
-      <br></br>
+      {user === null ? loginForm() : ''}
       {user && (
-        <>
-          <h2>
-            <span role="img" aria-label="blog emoji">
-              📋&nbsp;&nbsp;
-            </span>
-            Blogs
-          </h2>
-          <br></br>
-          <br></br>
-          <Toggleable
-            actionButtonLabel="Create a new blog"
-            cancelButtonLabel="close &nbsp;&nbsp;✖️"
-            ref={blogFormRef}
-          >
-            <CreateBlog />
-          </Toggleable>
-          <div id="blogs">
-            {sortedBlogs.map(blog => (
-              <Blog blog={blog} key={blog.id} user={user} />
-            ))}
+        <Router>
+          <div className="flex panel">
+            <div className="flex">
+              <Link to="/">Home</Link>
+              <Link to="/users">Users</Link>
+              <Link to="/create-blog">Create blog</Link>
+            </div>
+            <User user={user} />
           </div>
-        </>
+          <Switch>
+            <Route path="/users">
+              <Users />
+            </Route>
+            <Route path="/create-blog">
+              <div className="panel center">
+                <CreateBlog />
+              </div>
+            </Route>
+            <Route path="/">
+              <div id="blogs">
+                <br></br>
+                <br></br>
+                <h2>
+                  <span role="img" aria-label="blog emoji">
+                    📋&nbsp;&nbsp;
+                  </span>
+                  All Blogs
+                </h2>
+                {sortedBlogs.map(blog => (
+                  <Blog blog={blog} key={blog.id} user={user} />
+                ))}
+              </div>
+            </Route>
+          </Switch>
+        </Router>
       )}
     </>
   )
