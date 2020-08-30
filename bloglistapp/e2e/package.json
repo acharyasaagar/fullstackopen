@@ -1,0 +1,17 @@
+{
+  "name": "blog_app_e2e",
+  "version": "1.0.0",
+  "description": "End to end tests with cypress for the blog application",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "test": "cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^4.11.0",
+    "faker": "^4.1.0"
+  }
+}

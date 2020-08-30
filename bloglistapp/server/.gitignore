@@ -1,0 +1,4 @@
+**/requests/
+**/node_modules/
+**/*.env
+
