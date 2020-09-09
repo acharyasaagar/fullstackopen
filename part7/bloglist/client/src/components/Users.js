@@ -1,17 +1,7 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-
-import { initUsers } from '../store/async-actions'
-import { destroyUsersAction } from '../store/actions'
+import React from 'react'
+import { useSelector } from 'react-redux'
 
 const Users = props => {
-  const dispatch = useDispatch()
-  const fetchUsers = () => {
-    dispatch(initUsers())
-    return () => dispatch(destroyUsersAction())
-  }
-
-  useEffect(fetchUsers, [dispatch])
   const users = useSelector(state => state.users)
   return (
     <div className="panel">
@@ -26,7 +16,9 @@ const Users = props => {
         <tbody>
           {users.map(user => (
             <tr key={user.id}>
-              <td>{user.username}</td>
+              <td>
+                <a href={`/users/${user.id}`}> {user.username}</a>
+              </td>
               <td>{user.blogs.length}</td>
             </tr>
           ))}

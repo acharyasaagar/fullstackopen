@@ -16,6 +16,14 @@ body {
   margin: 32px auto;
 }
 
+a {
+  text-decoration: none;
+  color: #733cca;
+  font-size: 13px;
+  letter-spacing: 0.25px;
+  padding: 6px 12px 8px 12px;
+}
+
 .panel {
   margin: 12px 0;
   padding: 20px 32px 40px 32px;
@@ -36,7 +44,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  align-items: flex-end;
 }
 
 .title {
@@ -66,7 +73,7 @@ body {
   background: transparent;
 }
 
-a {
+.nav-link {
   text-decoration: none;
   text-transform: uppercase;
   color: #733cca;
@@ -79,7 +86,7 @@ a {
   transition: color 0.2s, background-color 0.5s;
 }
 
-a:hover {
+.nav-link:hover {
   color: #f3faff;
   background: #733cca;
 }

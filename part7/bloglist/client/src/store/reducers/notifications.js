@@ -1,7 +1,6 @@
 import { PUSH_NOTIFICATION, REMOVE_NOTIFICATION } from '../actions/action-types'
 
 const notificationsReducer = (state = [], action) => {
-  console.log('Incoming ', action)
   switch (action.type) {
     case PUSH_NOTIFICATION:
       return state.concat(action.data)

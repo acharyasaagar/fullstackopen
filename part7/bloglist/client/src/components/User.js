@@ -1,37 +1,33 @@
-import PropTypes from 'prop-types'
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
-
-import { setUserAction } from '../store/actions'
+import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const User = props => {
-  const { user } = props
-
-  const dispatch = useDispatch()
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    dispatch(setUserAction(null))
+  const { id } = useParams()
+  const user = useSelector(state => state.users.find(u => u.id === id))
+  if (!user) {
+    return <h5>loading user</h5>
   }
-
   return (
-    <div className="v-flex">
-      <p className="subtitle">
-        <span role="img" aria-label="user emoji">
-          👤&nbsp;&nbsp;
-        </span>
-        Logged in as: <span className="title"> {user.username}</span>
+    <div>
+      <br></br>
+      <h2>{user.name}</h2>
+      <br></br>
+      <p>
+        <strong>Added Blogs:</strong>
       </p>
-      <button id="logout-button" onClick={handleLogout}>
-        logout
-      </button>
+      <br></br>
+      {user?.blogs?.length === 0 ? (
+        <p>{`${user.name} had not added any blogs yet!`}</p>
+      ) : (
+        <ul>
+          {user.blogs.map(blog => (
+            <li key={blog.id}>{blog.title}</li>
+          ))}
+        </ul>
+      )}
     </div>
   )
-}
-
-User.propTypes = {
-  user: PropTypes.object.isRequired,
 }
 
 export default User

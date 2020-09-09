@@ -1,17 +1,20 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 
+import AppBar from './AppBar'
 import Blog from './Blog'
 import CreateBlog from './CreateBlog'
 import Login from './Login'
 import Notifications from './Notification'
-import User from './User'
 import Users from './Users'
+import User from './User'
 
 import Toggleable from './Toggleable'
 
 import { initBlogs } from '../store/async-actions'
+import { initUsers } from '../store/async-actions'
+import { destroyUsersAction } from '../store/actions'
 import { setUserAction } from '../store/actions'
 
 const App = () => {
@@ -30,19 +33,20 @@ const App = () => {
   const populateBlogs = () => {
     dispatch(initBlogs())
   }
+  const fetchUsers = () => {
+    dispatch(initUsers())
+    return () => dispatch(destroyUsersAction())
+  }
 
   useEffect(populateBlogs, [])
   useEffect(checkLoggedUser, [])
-
-  const blogFormRef = useRef()
+  useEffect(fetchUsers, [dispatch])
 
   const loginForm = () => (
     <Toggleable actionButtonLabel="log in" cancelButtonLabel="cancel">
       <Login />
     </Toggleable>
   )
-
-  const showUser = user => <User user={user} />
 
   return (
     <>
@@ -52,13 +56,22 @@ const App = () => {
         <Router>
           <div className="flex panel">
             <div className="flex">
-              <Link to="/">Home</Link>
-              <Link to="/users">Users</Link>
-              <Link to="/create-blog">Create blog</Link>
+              <Link to="/" className="nav-link">
+                Home
+              </Link>
+              <Link to="/users" className="nav-link">
+                Users
+              </Link>
+              <Link to="/create-blog" className="nav-link">
+                Create blog
+              </Link>
             </div>
-            <User user={user} />
+            <AppBar user={user} />
           </div>
           <Switch>
+            <Route path="/users/:id">
+              <User />
+            </Route>
             <Route path="/users">
               <Users />
             </Route>
