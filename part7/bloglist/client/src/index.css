@@ -29,7 +29,8 @@ a {
   padding: 20px 32px 40px 32px;
   border-radius: 4px;
   width: 100%;
-  box-shadow: 0 0 0 1px rgba(68, 4, 4, 0.15), 0 2px 3px rgba(61, 5, 5, 0.2);
+  box-shadow: 0 0 0 1px rgba(115, 60, 202, 0.15),
+    0 2px 3px rgba(94, 40, 178, 0.2);
 }
 
 .flex {

@@ -4,3 +4,4 @@ react-barebone/
 .prettierrc
 **/.env
 **/cypress/videos
+/bloglistapp
