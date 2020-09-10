@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const User = props => {
@@ -20,11 +20,16 @@ const User = props => {
       {user?.blogs?.length === 0 ? (
         <p>{`${user.name} had not added any blogs yet!`}</p>
       ) : (
-        <ul>
+        <div>
           {user.blogs.map(blog => (
-            <li key={blog.id}>{blog.title}</li>
+            <div className="v-flex">
+              <br></br>
+              <Link className="nav-link" to={`/blogs/${blog.id}`}>
+                {blog.title}
+              </Link>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   )

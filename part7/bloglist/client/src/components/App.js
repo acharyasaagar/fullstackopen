@@ -57,7 +57,7 @@ const App = () => {
           <div className="flex panel">
             <div className="flex">
               <Link to="/" className="nav-link">
-                Home
+                Blogs
               </Link>
               <Link to="/users" className="nav-link">
                 Users
@@ -80,6 +80,9 @@ const App = () => {
                 <CreateBlog />
               </div>
             </Route>
+            <Route path="/blogs/:id">
+              <Blog />
+            </Route>
             <Route path="/">
               <div id="blogs">
                 <br></br>
@@ -91,7 +94,12 @@ const App = () => {
                   All Blogs
                 </h2>
                 {sortedBlogs.map(blog => (
-                  <Blog blog={blog} key={blog.id} user={user} />
+                  <div key={`${blog.id}`} className="v-flex">
+                    <br></br>
+                    <Link className="nav-link" to={`/blogs/${blog.id}`}>
+                      {blog.title}
+                    </Link>
+                  </div>
                 ))}
               </div>
             </Route>
