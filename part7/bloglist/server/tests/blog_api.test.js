@@ -3,8 +3,9 @@ const supertest = require('supertest')
 
 const app = require('../app')
 const Blog = require('../models/blog')
-const blogFactory = require('./factories/blogFactory')
-const userFactory = require('./factories/userFactory')
+const factory = require('./factory')
+const blogFactory = factory('blog')
+const userFactory = factory('user')
 
 const INITIAL_BLOG_COUNT = 2
 const blogs = blogFactory(INITIAL_BLOG_COUNT)
@@ -37,7 +38,7 @@ describe('Blogs Api', () => {
 
   describe('User validation when creating a blog', () => {
     it('should should create a new blog when jwt is valid', async () => {
-      const user = userFactory()
+      const [user] = userFactory()
 
       await api.post('/api/users').send(user).expect(201)
       const loginResponse = await api
@@ -49,7 +50,7 @@ describe('Blogs Api', () => {
 
       expect(loggedUser.token).toBeDefined()
 
-      const newBlog = blogFactory()
+      const [newBlog] = blogFactory()
       const bearerToken = `bearer ${loggedUser.token}`
 
       await api
@@ -67,7 +68,7 @@ describe('Blogs Api', () => {
     })
 
     it('should fail with 401 "Unauthorized" error when trying to create blog with invalid token', async () => {
-      const newBlog = blogFactory()
+      const [newBlog] = blogFactory()
       const response = await api
         .post('/api/blogs')
         .send(newBlog)
@@ -85,7 +86,7 @@ describe('Blogs Api', () => {
     })
 
     it('should fail with 401 "Unauthorized" error when trying to create blog without token', async () => {
-      const newBlog = blogFactory()
+      const [newBlog] = blogFactory()
       const response = await api.post('/api/blogs').send(newBlog).expect(401)
 
       const newBlogsInDb = await Blog.find({})
@@ -99,7 +100,7 @@ describe('Blogs Api', () => {
   describe('Payload validation when creating a blog', () => {
     let bearerToken
     beforeEach(async () => {
-      const user = userFactory()
+      const [user] = userFactory()
 
       await api.post('/api/users').send(user)
 
@@ -112,7 +113,7 @@ describe('Blogs Api', () => {
     })
 
     it('should create blog with "likes" 0, if "likes" prop is missing from new blog', async () => {
-      const newBlog = blogFactory()
+      const [newBlog] = blogFactory()
       delete newBlog.likes
 
       const response = await api
@@ -128,7 +129,7 @@ describe('Blogs Api', () => {
     })
 
     it('should fail with 400, if "title" prop is missing from new blog', async () => {
-      const newBlog = blogFactory()
+      const [newBlog] = blogFactory()
       delete newBlog.title
 
       await api
@@ -142,7 +143,7 @@ describe('Blogs Api', () => {
     })
 
     it('should fail with 400, if "url" prop is missing from new blog', async () => {
-      const newBlog = blogFactory()
+      const [newBlog] = blogFactory()
       delete newBlog.url
 
       await api
@@ -159,7 +160,7 @@ describe('Blogs Api', () => {
   describe('Deleting and Updating a specific blog', () => {
     let bearerToken
     beforeEach(async () => {
-      const user = userFactory()
+      const [user] = userFactory()
 
       await api.post('/api/users').send(user)
 
@@ -172,7 +173,7 @@ describe('Blogs Api', () => {
     })
 
     it('should delete the blog if valid id is provided', async () => {
-      const newBlog = blogFactory()
+      const [newBlog] = blogFactory()
       const { body } = await api
         .post('/api/blogs')
         .send(newBlog)
@@ -205,7 +206,7 @@ describe('Blogs Api', () => {
     })
 
     it('should update the blog when valid payload and valid id is given', async () => {
-      const newBlog = blogFactory()
+      const [newBlog] = blogFactory()
 
       const { body } = await api
         .post('/api/blogs')
@@ -226,7 +227,7 @@ describe('Blogs Api', () => {
     })
 
     it('should increse likes when patch req is done with likes object', async () => {
-      const newBlog = blogFactory()
+      const [newBlog] = blogFactory()
 
       const { body } = await api
         .post('/api/blogs')
