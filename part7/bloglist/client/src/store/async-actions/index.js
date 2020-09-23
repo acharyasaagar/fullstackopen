@@ -4,6 +4,7 @@ import usersService from '../../services/users'
 
 import {
   addBlogAction,
+  addCommentAction,
   deleteBlogAction,
   initBlogsAction,
   initUsersAction,
@@ -62,6 +63,29 @@ export const deleteBlog = blog => {
         return dispatch(
           setNotifications({
             message: 'Blog Deleted Successfully!',
+            type: 'success',
+          })
+        )
+      }
+      throw new Error('Error deleting blog')
+    } catch (err) {
+      console.log(err)
+      return dispatch(
+        setNotifications({ message: err.message, type: 'success' })
+      )
+    }
+  }
+}
+
+export const addComment = (comment, blog) => {
+  return async dispatch => {
+    try {
+      const commentAdded = await blogService.comment(comment, blog)
+      if (commentAdded.status === 201) {
+        dispatch(addCommentAction(commentAdded.data))
+        return dispatch(
+          setNotifications({
+            message: 'Comment Added Successfully!',
             type: 'success',
           })
         )

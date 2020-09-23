@@ -17,9 +17,7 @@ const userProducer = () => {
 
 const commentProducer = () => {
   const randomNumber = Math.floor(Math.random() * 3)
-  const commenter = faker.name.findName()
-  const comment = faker.lorem.sentences(randomNumber)
-  return { commenter, comment }
+  return faker.lorem.sentences(randomNumber)
 }
 
 module.exports = {

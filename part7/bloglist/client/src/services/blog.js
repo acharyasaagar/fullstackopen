@@ -14,6 +14,9 @@ const config = () => ({
 
 const getAll = () => axios.get(baseUrl)
 
+const comment = (payload, blog) =>
+  axios.post(`${baseUrl}/${blog.id}/comments`, payload)
+
 const create = payload => axios.post(baseUrl, payload, config())
 
 const like = blog => axios.patch(`${baseUrl}/${blog.id}`, { likes: 'like' })
@@ -23,4 +26,4 @@ const remove = blog => axios.delete(`${baseUrl}/${blog.id}`, config())
 const update = (payload, blog) =>
   axios.put(`${baseUrl}/${blog.id}`, payload, config())
 
-export default { create, getAll, like, remove, update }
+export default { comment, create, getAll, like, remove, update }

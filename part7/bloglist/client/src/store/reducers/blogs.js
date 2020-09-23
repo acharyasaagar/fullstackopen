@@ -2,7 +2,7 @@ import {
   ADD_BLOG,
   DELETE_BLOG,
   INIT_BLOGS,
-  LIKE_BLOG,
+  UPDATE_BLOG,
 } from '../actions/action-types'
 
 const blogsReducer = (state = [], action) => {
@@ -11,12 +11,12 @@ const blogsReducer = (state = [], action) => {
       return [...action.data]
     case ADD_BLOG:
       return state.concat(action.data)
-    case LIKE_BLOG:
+    case DELETE_BLOG:
+      return state.filter(blog => blog.id !== action.data.id)
+    case UPDATE_BLOG:
       return state.map(blog =>
         blog.id === action.data.id ? action.data : blog
       )
-    case DELETE_BLOG:
-      return state.filter(blog => blog.id !== action.data.id)
     default:
       return state
   }

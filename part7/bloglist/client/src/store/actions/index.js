@@ -4,10 +4,10 @@ import {
   DESTROY_USERS,
   INIT_BLOGS,
   INIT_USERS,
-  LIKE_BLOG,
   PUSH_NOTIFICATION,
   SET_USER,
   REMOVE_NOTIFICATION,
+  UPDATE_BLOG,
 } from './action-types'
 
 export const initBlogsAction = blogs => ({
@@ -21,12 +21,17 @@ export const addBlogAction = blog => ({
 })
 
 export const likeBlogAction = blog => ({
-  type: LIKE_BLOG,
+  type: UPDATE_BLOG,
   data: blog,
 })
 
 export const deleteBlogAction = blog => ({
   type: DELETE_BLOG,
+  data: blog,
+})
+
+export const addCommentAction = blog => ({
+  type: UPDATE_BLOG,
   data: blog,
 })
 

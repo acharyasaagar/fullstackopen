@@ -133,4 +133,19 @@ blogsRouter.patch('/:id', async (req, res) => {
   return res.status(404).send({ err: 'Blog does not exist' })
 })
 
+blogsRouter.post('/:id/comments', async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id)
+    console.log(blog)
+    if (blog) {
+      blog.comments = [...blog.comments, req.body.comment]
+      const updatedBlog = await blog.save()
+      return res.status(201).json(updatedBlog)
+    }
+    return res.status(400).send({ err: 'Blog does not exist!' })
+  } catch (err) {
+    res.status(400).send({ err: 'Something went wrong' })
+  }
+})
+
 module.exports = blogsRouter

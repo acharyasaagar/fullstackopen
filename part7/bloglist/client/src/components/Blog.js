@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import { likeBlog, deleteBlog } from '../store/async-actions'
+import { likeBlog, deleteBlog, addComment } from '../store/async-actions'
+import Comments from './Comments'
 
 const Blog = () => {
+  const [comment, setComment] = useState('')
+
   const { id } = useParams()
 
   const blog = useSelector(state => state.blogs.find(b => b.id === id))
@@ -24,6 +27,18 @@ const Blog = () => {
       const confirmed = window.confirm(`Remove blog: ${blog.title}`)
       if (confirmed) dispatch(deleteBlog(blog))
     }
+  }
+
+  const handleAddComment = blog => {
+    return e => {
+      e.preventDefault()
+      dispatch(addComment({ comment }, blog))
+      setComment('')
+    }
+  }
+
+  const handleCommentChange = e => {
+    setComment(e.target.value)
   }
 
   if (!blog) {
@@ -71,6 +86,14 @@ const Blog = () => {
               ''
             )}
           </div>
+        </section>
+        <section className="v-flex">
+          <Comments
+            comment={comment}
+            addComment={handleAddComment(blog)}
+            comments={blog.comments}
+            handleCommentChange={handleCommentChange}
+          />
         </section>
       </div>
     </>
