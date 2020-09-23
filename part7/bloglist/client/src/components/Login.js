@@ -1,16 +1,13 @@
-import PropTypes from 'prop-types'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-import authService from '../services/auth'
-
-import Notification from './Notification'
+import { loginUser } from '../store/async-actions'
 
 const Login = props => {
-  const { setUser } = props
+  const dispatch = useDispatch()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [err, setErr] = useState(null)
 
   const handlePasswordChange = e => {
     setPassword(e.target.value)
@@ -21,21 +18,11 @@ const Login = props => {
 
   const handleLogin = async e => {
     e.preventDefault()
-    try {
-      const res = await authService.login({ username, password })
-      const user = Object.assign({}, res.data)
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      setUser(user)
-      authService.setToken(user.token)
-    } catch (e) {
-      setErr({ message: 'Invalid Credentials' })
-      setTimeout(() => setErr(null), 5000)
-    }
+    dispatch(loginUser({ username, password }))
   }
 
   return (
     <div className="panel">
-      <Notification err={err} success={null} />
       <h4>Login to application</h4>
       <form onSubmit={handleLogin}>
         <section>
@@ -64,10 +51,6 @@ const Login = props => {
       </form>
     </div>
   )
-}
-
-Login.propTypes = {
-  setUser: PropTypes.func.isRequired,
 }
 
 export default Login

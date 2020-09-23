@@ -1,137 +1,110 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 
+import AppBar from './AppBar'
 import Blog from './Blog'
 import CreateBlog from './CreateBlog'
 import Login from './Login'
-import Notification from './Notification'
+import Notifications from './Notification'
+import Users from './Users'
 import User from './User'
 
-import blogService from '../services/blog'
 import Toggleable from './Toggleable'
 
+import { initBlogs } from '../store/async-actions'
+import { initUsers } from '../store/async-actions'
+import { destroyUsersAction } from '../store/actions'
+import { setUserAction } from '../store/actions'
+
 const App = () => {
-  const [user, setUser] = useState(null)
-  const [err, setErr] = useState(null)
-  const [success, setSuccess] = useState(null)
+  const dispatch = useDispatch()
 
-  const setBlogs = () => 'blog'
-
-  const blogs = useSelector(state => state)
+  const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
 
   const sortedBlogs = blogs.sort((first, second) => second.likes - first.likes)
 
   const checkLoggedUser = () => {
-    const user = window.localStorage.getItem('loggedUser')
-    setUser(JSON.parse(user))
+    const user = JSON.parse(window.localStorage.loggedUser || null)
+    dispatch(setUserAction(user))
   }
+
   const populateBlogs = () => {
-    async function getBlogs() {
-      const blogs = await blogService.getAll()
-      setBlogs([...blogs.data])
-    }
-    getBlogs()
+    dispatch(initBlogs())
   }
-  const createBlog = async blog => {
-    try {
-      const { data } = await blogService.create(blog)
-      setBlogs(blogs.concat(data))
-      blogFormRef.current.toggleVisibility()
-    } catch (err) {
-      throw new Error('Error creating blog')
-    }
-  }
-
-  const likeBlog = async blogId => {
-    try {
-      const { data } = await blogService.like(blogId)
-      setBlogs(blogs.filter(blog => blog.id !== blogId).concat(data))
-    } catch (err) {
-      console.log(err)
-      setErr({ message: 'Error liking blog' })
-      setTimeout(() => setErr(null), 5000)
-    }
-  }
-
-  // const updateBlog = async (updatedBlog, blogId) => {
-  //   try {
-  //     const { data } = await blogService.update(updatedBlog, blogId)
-  //     setBlogs(blogs.filter(blog => blog.id !== blogId).concat(data))
-  //   } catch (err) {
-  //     console.log(err)
-  //     setErr({ message: 'Error updating blog' })
-  //     setTimeout(() => setErr(null), 5000)
-  //   }
-  // }
-
-  const deleteBlog = async blogId => {
-    try {
-      await blogService.remove(blogId)
-      setBlogs(blogs.filter(blog => blog.id !== blogId))
-    } catch (err) {
-      console.log(err)
-      setErr({ message: 'Error deleting blog' })
-      setTimeout(() => setErr(null), 5000)
-    }
+  const fetchUsers = () => {
+    dispatch(initUsers())
+    return () => dispatch(destroyUsersAction())
   }
 
   useEffect(populateBlogs, [])
   useEffect(checkLoggedUser, [])
-
-  const blogFormRef = useRef()
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    setUser(null)
-  }
+  useEffect(fetchUsers, [dispatch])
 
   const loginForm = () => (
     <Toggleable actionButtonLabel="log in" cancelButtonLabel="cancel">
-      <Login setUser={setUser} />
+      <Login />
     </Toggleable>
   )
 
-  const showUser = user => <User user={user} handleLogout={handleLogout} />
-
   return (
     <>
-      <Notification err={err} success={success} />
-      {user === null ? loginForm() : showUser(user)}
-      <br></br>
-      <br></br>
-      {user === null ? (
-        ''
-      ) : (
-        <>
-          <h2>
-            <span role="img" aria-label="blog emoji">
-              📋&nbsp;&nbsp;
-            </span>
-            Blogs
-          </h2>
-          <br></br>
-          <br></br>
-          <div className="panel">
-            <Toggleable
-              actionButtonLabel="Create a new blog"
-              cancelButtonLabel="close &nbsp;&nbsp;✖️"
-              ref={blogFormRef}
-            >
-              <CreateBlog createBlog={createBlog} setSuccess={setSuccess} />
-            </Toggleable>
+      <Notifications />
+      {user === null ? loginForm() : ''}
+      {user && (
+        <Router>
+          <div className="flex panel">
+            <div className="flex">
+              <Link to="/" className="nav-link">
+                Blogs
+              </Link>
+              <Link to="/users" className="nav-link">
+                Users
+              </Link>
+              <Link to="/create-blog" className="nav-link">
+                Create blog
+              </Link>
+            </div>
+            <AppBar user={user} />
           </div>
-          <div id="blogs">
-            {sortedBlogs.map(blog => (
-              <Blog
-                blog={blog}
-                likeBlog={likeBlog}
-                deleteBlog={deleteBlog}
-                key={blog.id}
-                user={user}
-              />
-            ))}
-          </div>
-        </>
+          <Switch>
+            <Route path="/users/:id">
+              <User />
+            </Route>
+            <Route path="/users">
+              <Users />
+            </Route>
+            <Route path="/create-blog">
+              <div className="panel center">
+                <CreateBlog />
+              </div>
+            </Route>
+            <Route path="/blogs/:id">
+              <Blog />
+            </Route>
+            <Route path="/">
+              <div id="blogs">
+                <br></br>
+                <br></br>
+                <h2>
+                  <span role="img" aria-label="blog emoji">
+                    📋&nbsp;&nbsp;
+                  </span>
+                  All Blogs
+                </h2>
+                {sortedBlogs.map(blog => (
+                  <div key={`${blog.id}`} className="v-flex">
+                    <br></br>
+                    <Link className="nav-link" to={`/blogs/${blog.id}`}>
+                      {blog.title}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </Route>
+          </Switch>
+        </Router>
       )}
     </>
   )
