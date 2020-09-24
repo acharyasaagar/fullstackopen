@@ -2,10 +2,45 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
+import Button from '@material-ui/core/Button'
+import Chip from '@material-ui/core/Chip'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+
 import { likeBlog, deleteBlog, addComment } from '../store/async-actions'
 import Comments from './Comments'
 
+const useStyles = makeStyles(theme => ({
+  container: {
+    width: '100%',
+    padding: '2.4em',
+  },
+  '.MuiChip-root': {
+    padding: '0.4em',
+    marginLeft: '0.8em',
+    color: theme.palette.grey[600],
+  },
+  '.MuiLink-root': {
+    textDecoration: 'none',
+    letterSpacing: '0.85px',
+    color: theme.palette.primary.main,
+  },
+  deleteButtonContainer: props => {
+    return {
+      [theme.breakpoints.up('sm')]: {
+        marginTop: '-4em',
+        marginBottom: '2em',
+        justifyContent: 'flex-end',
+      },
+    }
+  },
+}))
+
 const Blog = () => {
+  const classes = useStyles()
   const [comment, setComment] = useState('')
 
   const { id } = useParams()
@@ -47,55 +82,58 @@ const Blog = () => {
 
   return (
     <>
-      <div className="panel blog" id={`${blog.id}`}>
-        <section className="flex">
-          <div>
-            <p className="title">{blog.title}</p>
-            <p className="url">
-              <span role="img" aria-label="blog link">
-                &#128279;&nbsp;
-              </span>
-              <a href={blog.url}>{blog.url}</a>
-            </p>
-            <p className="subtitle">
-              <span> {blog.author} </span>
-              <button
-                className="meta"
+      <Paper className={classes.container} id={`${blog.id}`} elevation={1}>
+        <div>
+          <Typography variant="h6" gutterBottom>
+            {blog.title}
+          </Typography>
+          <Typography variant="subtitle1" gutterBottom>
+            <a className={classes['.MuiLink-root']} href={blog.url}>
+              {blog.url}
+            </a>
+          </Typography>
+          <Grid container alignItems="center">
+            <Grid item>
+              <Typography color="textSecondary" variant="overline" gutterBottom>
+                {blog.author}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Chip
+                className={classes['.MuiChip-root']}
+                size="small"
                 data-test="like-blog-button"
                 onClick={handleLikeBlog(blog)}
-              >
-                <span role="img" aria-label="blog link">
-                  &nbsp;&nbsp;&#128420;&nbsp;&nbsp;
-                </span>
-                {blog.likes ? blog.likes : 0} likes
-              </button>
-            </p>
-          </div>
-          <div className="v-flex">
+                label={`${blog.likes ? blog.likes : 0} likes`}
+                icon={<FavoriteIcon />}
+                variant="outlined"
+              />
+            </Grid>
+          </Grid>
+        </div>
+        <Grid container className={classes.deleteButtonContainer}>
+          <Grid item>
             {blog.user && user.id === blog.user.id ? (
-              <button
+              <Button
                 data-test="delete-blog-button"
                 onClick={handleDeleteBlog(blog)}
+                color="secondary"
+                variant="contained"
               >
-                delete
-                <span role="img" aria-label="blog delete">
-                  &nbsp;&nbsp;&nbsp;🗑
-                </span>
-              </button>
+                Delete
+              </Button>
             ) : (
               ''
             )}
-          </div>
-        </section>
-        <section className="v-flex">
-          <Comments
-            comment={comment}
-            addComment={handleAddComment(blog)}
-            comments={blog.comments}
-            handleCommentChange={handleCommentChange}
-          />
-        </section>
-      </div>
+          </Grid>
+        </Grid>
+        <Comments
+          comment={comment}
+          addComment={handleAddComment(blog)}
+          comments={blog.comments}
+          handleCommentChange={handleCommentChange}
+        />
+      </Paper>
     </>
   )
 }

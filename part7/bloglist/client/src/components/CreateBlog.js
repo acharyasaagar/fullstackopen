@@ -2,9 +2,37 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
+import AddIcon from '@material-ui/icons/Add'
+import Button from '@material-ui/core/Button'
+import CreateIcon from '@material-ui/icons/Create'
+import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
+
+import { makeStyles } from '@material-ui/core/styles'
+
 import { addBlog } from '../store/async-actions'
 
+const useStyles = makeStyles({
+  svgIcon: {
+    marginLeft: '0.6em',
+    marginBottom: '-0.1em',
+    fontSize: '16px',
+  },
+  blogForm: {
+    margin: '2em 0',
+  },
+  textField: {
+    margin: '0.6em 0',
+    width: '100%',
+    maxWidth: '56em',
+  },
+  submitButton: {
+    marginTop: '0.4em',
+  },
+})
+
 const CreateBlog = props => {
+  const classes = useStyles()
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
@@ -46,49 +74,58 @@ const CreateBlog = props => {
 
   return (
     <div>
-      <h4>
+      <Typography variant="h6">
         Create Blog
-        <span role="img" aria-label="user emoji">
-          &nbsp;&nbsp;📝
-        </span>
-      </h4>
-      <form onSubmit={handleAddBlog} data-test="create-blog-form">
-        <section>
-          <label htmlFor="title">Blog Title:</label>
-          <input
+        <CreateIcon className={classes.svgIcon} />
+      </Typography>
+      <form
+        className={classes.blogForm}
+        onSubmit={handleAddBlog}
+        data-test="create-blog-form"
+      >
+        <div>
+          <TextField
+            className={classes.textField}
+            variant="filled"
+            label="Blog Title"
             data-test="blog-title-input"
-            type="text"
             name="title"
             value={title}
             onChange={handleTitleChange}
           />
-        </section>
-        <section>
-          <label htmlFor="url">Blog URL: </label>
-          <input
-            data-test="blog-url-input"
-            value={url}
-            type="text"
+        </div>
+        <div>
+          <TextField
+            className={classes.textField}
+            variant="filled"
+            label="Blog URL"
+            data-test="blog-utl-input"
             name="url"
+            value={url}
             onChange={handleUrlChange}
           />
-        </section>
-        <section>
-          <label htmlFor="author">Author: </label>
-          <input
+        </div>
+        <div>
+          <TextField
+            className={classes.textField}
+            variant="filled"
+            label="Author"
             data-test="blog-author-input"
-            value={author}
-            type="text"
             name="author"
+            value={author}
             onChange={handleAuthorChange}
           />
-        </section>
-        <button type="submit" data-test="blog-add-button">
-          add blog
-          <span role="img" aria-label="user emoji">
-            &nbsp;&nbsp;➕
-          </span>
-        </button>
+        </div>
+        <Button
+          className={classes.submitButton}
+          type="submit"
+          data-test="blog-add-button"
+          variant="contained"
+          color="primary"
+          endIcon={<AddIcon />}
+        >
+          Add Blog
+        </Button>
       </form>
     </div>
   )

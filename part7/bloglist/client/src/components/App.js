@@ -1,8 +1,17 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Link as RouterLink,
+  Route,
+  Switch,
+} from 'react-router-dom'
 
-import AppBar from './AppBar'
+import Link from '@material-ui/core/Link'
+import { makeStyles } from '@material-ui/core'
+
+import AppNavBar from './AppNavBar'
+
 import Blog from './Blog'
 import CreateBlog from './CreateBlog'
 import Login from './Login'
@@ -10,15 +19,20 @@ import Notifications from './Notification'
 import Users from './Users'
 import User from './User'
 
-import Toggleable from './Toggleable'
-
 import { initBlogs } from '../store/async-actions'
 import { initUsers } from '../store/async-actions'
 import { destroyUsersAction } from '../store/actions'
 import { setUserAction } from '../store/actions'
 
+const useStyles = makeStyles({
+  '.MuiLink-root': {
+    padding: '0.6em',
+  },
+})
+
 const App = () => {
   const dispatch = useDispatch()
+  const classes = useStyles()
 
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
@@ -42,32 +56,13 @@ const App = () => {
   useEffect(checkLoggedUser, [])
   useEffect(fetchUsers, [dispatch])
 
-  const loginForm = () => (
-    <Toggleable actionButtonLabel="log in" cancelButtonLabel="cancel">
-      <Login />
-    </Toggleable>
-  )
-
   return (
     <>
       <Notifications />
-      {user === null ? loginForm() : ''}
+      {user === null ? <Login /> : ''}
       {user && (
         <Router>
-          <div className="flex panel">
-            <div className="flex">
-              <Link to="/" className="nav-link">
-                Blogs
-              </Link>
-              <Link to="/users" className="nav-link">
-                Users
-              </Link>
-              <Link to="/create-blog" className="nav-link">
-                Create blog
-              </Link>
-            </div>
-            <AppBar user={user} />
-          </div>
+          <AppNavBar user={user} />
           <Switch>
             <Route path="/users/:id">
               <User />
@@ -85,18 +80,10 @@ const App = () => {
             </Route>
             <Route path="/">
               <div id="blogs">
-                <br></br>
-                <br></br>
-                <h2>
-                  <span role="img" aria-label="blog emoji">
-                    📋&nbsp;&nbsp;
-                  </span>
-                  All Blogs
-                </h2>
+                <h2>All Blogs</h2>
                 {sortedBlogs.map(blog => (
-                  <div key={`${blog.id}`} className="v-flex">
-                    <br></br>
-                    <Link className="nav-link" to={`/blogs/${blog.id}`}>
+                  <div key={`${blog.id}`} className={classes['.MuiLink-root']}>
+                    <Link component={RouterLink} to={`/blogs/${blog.id}`}>
                       {blog.title}
                     </Link>
                   </div>
